@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -23,11 +24,17 @@ namespace pryBordonInventarioMejorado
             conexionBD BD = new conexionBD();
             BD.mostrarProductos(dgvProductos);
 
-            string[] categorias = new string[] { "Electronicos", "Hogar", "Deportes", "Libros", "Accesorios", "Herramientas", "Cocina", "Oficina" };
-
-            foreach (var categoria in categorias)
+            using (SqlConnection conexion = new SqlConnection(BD.cadena))
             {
-                cmbCategorias.Items.Add(categoria);
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Id, Nombre FROM Categorias", conexion);
+                SqlDataAdapter adaptador = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adaptador.Fill(dt);
+
+                cmbCategorias.DisplayMember = "Nombre";
+                cmbCategorias.ValueMember = "Id";
+                cmbCategorias.DataSource = dt;
             }
         }
 
@@ -42,9 +49,9 @@ namespace pryBordonInventarioMejorado
                 productoNuevo.Descripcion = txtDescripcion.Text;
                 productoNuevo.Precio = Convert.ToInt32(numPrecio.Value);
                 productoNuevo.Stock = Convert.ToInt32(numStock.Value);
-                productoNuevo.Categoria = cmbCategorias.Text;
+                productoNuevo.CategoriaId = Convert.ToInt32(cmbCategorias.SelectedValue);
 
-                BD.agregarProductos(productoNuevo);
+                BD.agregarProducto(productoNuevo);
                 BD.mostrarProductos(dgvProductos);
 
                 MessageBox.Show("Producto agregado con éxito.");
@@ -57,7 +64,9 @@ namespace pryBordonInventarioMejorado
             txtNombre.Text = "";
             txtDescripcion.Text = "";
             numPrecio.Value = 0;
-            numStock.Value = 0;           
+            numStock.Value = 0;
+            cmbCategorias.SelectedIndex = -1;  
+            cmbCategorias.Text = "Selecciona una opción...";
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)

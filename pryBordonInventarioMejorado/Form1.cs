@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using pyInventario;
 
+
 namespace pryBordonInventarioMejorado
 {
     public partial class Form1 : Form
@@ -18,6 +19,11 @@ namespace pryBordonInventarioMejorado
         {
             InitializeComponent();
         }
+
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -50,14 +56,10 @@ namespace pryBordonInventarioMejorado
 
         private void btnModificarProducto_Click(object sender, EventArgs e)
         {
-
+            frmModificarProducto v = new frmModificarProducto();
+            v.ShowDialog();
         }
-
-        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-        private extern static void ReleaseCapture();
-        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
-
+      
         private void panelTitulo_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
@@ -81,5 +83,11 @@ namespace pryBordonInventarioMejorado
             frmEliminarProducto v = new frmEliminarProducto();
             v.ShowDialog();
         }
+
+        private void btnReporte_Click(object sender, EventArgs e)
+        {
+            conexionBD BD = new conexionBD();
+            BD.GenerarVisualizarYDescargarReporteHTML();
+        }   
     }
 }

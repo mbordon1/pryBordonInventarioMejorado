@@ -2,6 +2,7 @@
 {
     partial class Form1
     {
+
         /// <summary>
         /// Variable del diseñador necesaria.
         /// </summary>
@@ -167,6 +168,7 @@
             this.btnReporte.TabIndex = 9;
             this.btnReporte.Text = "Generar reporte";
             this.btnReporte.UseVisualStyleBackColor = false;
+            this.btnReporte.Click += new System.EventHandler(this.btnReporte_Click);
             // 
             // panel4
             // 
@@ -284,7 +286,7 @@
             // 
             // panelContenedor
             // 
-            this.panelContenedor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(82)))));
+            this.panelContenedor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(45)))), ((int)(((byte)(55)))));
             this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContenedor.Location = new System.Drawing.Point(269, 35);
             this.panelContenedor.Name = "panelContenedor";

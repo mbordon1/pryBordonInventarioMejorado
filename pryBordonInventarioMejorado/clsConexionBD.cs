@@ -3,99 +3,135 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
 using System.Reflection;
+using System.IO;
+using System.Diagnostics;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Kernel.Font;
+using iText.IO.Font.Constants;
+using iText.IO.Font;
+using iText.Kernel.Colors;
+using iText.Layout.Properties;
+using iText.Bouncycastleconnector;
+using System.Globalization;
+
 
 namespace pyInventario
 {
     public class conexionBD
     {
-        OleDbCommand comando;
-        OleDbConnection conexion;
-        OleDbDataAdapter adaptador;
         public string cadena;
 
         public conexionBD()
         {
-            cadena = @"Provider=Microsoft.ACE.OLEDB.16.0;Data Source=C:\\Users\\mbord\\Desktop\\pryBordonInventarioMejorado\\pryBordonInventarioMejorado\\bin\\Debug\\dbProducts.mdb;";
+             cadena = "Server=localhost;Database=Productos;Trusted_Connection=True;";
+        }
+
+        public int ObtenerIdCategoriaPorNombre(string nombreCategoria)
+        {
+            int id = -1;
+
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(cadena))
+                using (SqlCommand comando = new SqlCommand("SELECT Id FROM Categorias WHERE Nombre = @Nombre", conexion))
+                {
+                    comando.Parameters.AddWithValue("@Nombre", nombreCategoria);
+                    conexion.Open();
+
+                    var resultado = comando.ExecuteScalar();
+                    if (resultado != null)
+                    {
+                        id = Convert.ToInt32(resultado);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener ID de la categoría: {ex.Message}");
+            }
+
+            return id;
         }
 
         public void mostrarProductos(DataGridView dgvProductos)
         {
             try
             {
-                conexion = new OleDbConnection(cadena);
-                comando = new OleDbCommand();
+                string consulta = @"
+                SELECT 
+                p.Codigo,
+                p.Nombre,
+                p.Descripcion,
+                p.Precio,
+                p.Stock,
+                c.Nombre AS Categoria
+                FROM Productos p
+                INNER JOIN Categorias c ON p.CategoriaId = c.Id";
 
-                comando.Connection = conexion;
-                comando.CommandType = CommandType.Text;
-                comando.CommandText = "SELECT * FROM Productos";
-
-                DataTable tablaProductos = new DataTable();
-
-                adaptador = new OleDbDataAdapter(comando);
-                adaptador.Fill(tablaProductos);
-
-                dgvProductos.DataSource = tablaProductos; 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        public void agregarProductos(Productos producto)
-        {
-            if (string.IsNullOrWhiteSpace(producto.Nombre) || producto.Precio <= 0 || producto.Stock < 0)
-            {
-                MessageBox.Show("Por favor ingrese los datos correctamente.");
-                return;
-            }
-
-            try
-            {
-                using (OleDbConnection conexion = new OleDbConnection(cadena))
-                using (OleDbCommand comando = new OleDbCommand())
+                using (SqlConnection conexion = new SqlConnection(cadena))
+                using (SqlDataAdapter adaptador = new SqlDataAdapter(consulta, conexion))
                 {
-                    comando.Connection = conexion;
-                    comando.CommandType = CommandType.Text;
-                    comando.CommandText = "INSERT INTO Productos(Nombre, Descripcion, Precio, Stock, Categoria) VALUES(?, ?, ?, ?, ?)";
-
-                    comando.Parameters.AddWithValue("?", producto.Nombre);
-                    comando.Parameters.AddWithValue("?", producto.Descripcion);
-                    comando.Parameters.AddWithValue("?", producto.Precio);
-                    comando.Parameters.AddWithValue("?", producto.Stock);
-                    comando.Parameters.AddWithValue("?", producto.Categoria);
-
-                    conexion.Open();
-                    comando.ExecuteNonQuery();
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+                    dgvProductos.DataSource = tabla;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al agregar el producto: {ex.Message}");
+                MessageBox.Show($"Error al cargar los productos: {ex.Message}");
             }
         }
 
-        public void modificarProductos(Productos producto)
+        public void agregarProducto(Productos producto)
+        {
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                conexion.Open();
+                string consulta = @"INSERT INTO Productos (Nombre, Descripcion, Precio, Stock, CategoriaId) 
+                            VALUES (@Nombre, @Descripcion, @Precio, @Stock, @CategoriaId)";
+
+                using (SqlCommand comando = new SqlCommand(consulta, conexion))
+                {
+                    comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                    comando.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                    comando.Parameters.AddWithValue("@Precio", producto.Precio);
+                    comando.Parameters.AddWithValue("@Stock", producto.Stock);
+                    comando.Parameters.AddWithValue("@CategoriaId", producto.CategoriaId);
+                    comando.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void modificarProducto(Productos producto)
         {
             try
             {
-                using (OleDbConnection conexion = new OleDbConnection(cadena))
-                using (OleDbCommand comando = new OleDbCommand())
+                using (SqlConnection conexion = new SqlConnection(cadena))
+                using (SqlCommand comando = new SqlCommand())
                 {
                     comando.Connection = conexion;
                     comando.CommandType = CommandType.Text;
-                    comando.CommandText = "UPDATE Productos SET Nombre = ?, Descripcion = ?, Precio = ?, Stock = ?, Categoria = ? WHERE ID = ?";
+                    comando.CommandText = @"
+                UPDATE Productos 
+                SET Nombre = @Nombre, 
+                    Descripcion = @Descripcion, 
+                    Precio = @Precio, 
+                    Stock = @Stock, 
+                    CategoriaId = @CategoriaId 
+                WHERE Codigo = @Codigo";
 
-                    comando.Parameters.AddWithValue("?", producto.Nombre);
-                    comando.Parameters.AddWithValue("?", producto.Descripcion);
-                    comando.Parameters.AddWithValue("?", producto.Precio);
-                    comando.Parameters.AddWithValue("?", producto.Stock);
-                    comando.Parameters.AddWithValue("?", producto.Categoria);
-                    comando.Parameters.AddWithValue("?", producto.ID);
+                    comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                    comando.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                    comando.Parameters.AddWithValue("@Precio", producto.Precio);
+                    comando.Parameters.AddWithValue("@Stock", producto.Stock);
+                    comando.Parameters.AddWithValue("@CategoriaId", producto.CategoriaId); 
+                    comando.Parameters.AddWithValue("@Codigo", producto.Codigo); 
 
                     conexion.Open();
                     int filasAfectadas = comando.ExecuteNonQuery();
@@ -106,7 +142,7 @@ namespace pyInventario
                     }
                     else
                     {
-                        MessageBox.Show("No se encontró un producto con ese ID.");
+                        MessageBox.Show("No se encontró un producto con ese Código.");
                     }
                 }
             }
@@ -116,75 +152,69 @@ namespace pyInventario
             }
         }
 
-        public void eliminarProducto(string ID)
+        public void eliminarProducto(string codigo)
         {
-            OleDbConnection conexion = null;
-            OleDbCommand comando = null;
             try
             {
-                conexion = new OleDbConnection(cadena);
-                comando = new OleDbCommand();
-                comando.Connection = conexion;
-                comando.CommandType = CommandType.Text;
-
-                comando.CommandText = "SELECT COUNT(*) FROM Productos WHERE ID = ?";
-                comando.Parameters.AddWithValue("?", ID);
-
-                conexion.Open();
-
-                int count = Convert.ToInt32(comando.ExecuteScalar());
-                if (count == 0)
+                using (SqlConnection conexion = new SqlConnection(cadena))
+                using (SqlCommand comando = new SqlCommand())
                 {
-                    MessageBox.Show("No se encontró el producto con ese código.");
-                    return;
-                }
+                    comando.Connection = conexion;
+                    comando.CommandType = CommandType.Text;
 
-                comando.CommandText = "DELETE FROM Productos WHERE ID = ?";
-                int filasAfectadas = comando.ExecuteNonQuery();
+                    comando.CommandText = "SELECT COUNT(*) FROM Productos WHERE Codigo = @Codigo";
+                    comando.Parameters.AddWithValue("@Codigo", codigo);
 
-                if (filasAfectadas > 0)
-                {
-                    MessageBox.Show("Producto eliminado con éxito.");
-                }
-                else
-                {
-                    MessageBox.Show("No se pudo eliminar el producto. Intenta de nuevo.");
+                    conexion.Open();
+
+                    int count = Convert.ToInt32(comando.ExecuteScalar());
+                    if (count == 0)
+                    {
+                        MessageBox.Show("No se encontró el producto con ese código.");
+                        return;
+                    }
+
+                    comando.CommandText = "DELETE FROM Productos WHERE Codigo = @Codigo";
+
+                    int filasAfectadas = comando.ExecuteNonQuery();
+
+                    if (filasAfectadas > 0)
+                    {
+                        MessageBox.Show("Producto eliminado con éxito.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo eliminar el producto. Intenta de nuevo.");
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al eliminar el producto: {ex.Message}");
             }
-            finally
-            {
-                if (conexion != null && conexion.State == ConnectionState.Open)
-                {
-                    conexion.Close();
-                }
-            }
         }
 
-        public void buscarProductoPorID(string id, DataGridView dgvProductos)
+        public void buscarProductoPorID(string codigo, DataGridView dgvProductos)
         {
             try
             {
-                if (!int.TryParse(id, out int idNumerico))
+                if (!int.TryParse(codigo, out int codigoNumerico))
                 {
-                    MessageBox.Show("Por favor ingrese un ID numérico válido.");
+                    MessageBox.Show("Por favor ingrese un código numérico válido.");
                     return;
                 }
 
-                using (OleDbConnection conexion = new OleDbConnection(cadena))
-                using (OleDbCommand comando = new OleDbCommand())
+                using (SqlConnection conexion = new SqlConnection(cadena))
+                using (SqlCommand comando = new SqlCommand())
                 {
                     comando.Connection = conexion;
                     comando.CommandType = CommandType.Text;
-
-                    comando.CommandText = "SELECT * FROM Productos WHERE ID = @ID";
-                    comando.Parameters.AddWithValue("@ID", idNumerico);
+                    comando.CommandText = "SELECT * FROM Productos WHERE Codigo = @Codigo";
+                    comando.Parameters.AddWithValue("@Codigo", codigoNumerico);
 
                     DataTable tablaProductos = new DataTable();
-                    using (OleDbDataAdapter adaptador = new OleDbDataAdapter(comando))
+
+                    using (SqlDataAdapter adaptador = new SqlDataAdapter(comando))
                     {
                         adaptador.Fill(tablaProductos);
                     }
@@ -195,7 +225,7 @@ namespace pyInventario
                     }
                     else
                     {
-                        MessageBox.Show("No se encontró ningún producto con ese ID.");
+                        MessageBox.Show("No se encontró ningún producto con ese código.");
                         dgvProductos.DataSource = null;
                     }
                 }
@@ -206,6 +236,154 @@ namespace pyInventario
             }
         }
 
+        public void GenerarVisualizarYDescargarReporteHTML()
+        {
+            try
+            {
+                string htmlContent = GenerarHTMLReport();
+
+                MostrarEnNavegador(htmlContent);
+
+                if (MessageBox.Show("¿Desea guardar una copia del reporte?", "Guardar reporte",
+                                  MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    GuardarReporte(htmlContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GenerarHTMLReport()
+        {
+            DataTable productos = new DataTable();
+
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            using (SqlCommand comando = new SqlCommand(@"
+            SELECT 
+               p.Codigo,
+               p.Nombre,
+               p.Descripcion,
+               p.Precio,
+               p.Stock,
+               c.Nombre AS Categoria
+           FROM Productos p
+           INNER JOIN Categorias c ON p.CategoriaId = c.Id
+           ORDER BY c.Nombre, p.Nombre", conexion))
+            using (SqlDataAdapter adaptador = new SqlDataAdapter(comando))
+            {
+                adaptador.Fill(productos);
+            }
+
+            decimal valorTotalInventario = 0;
+            int totalProductos = productos.Rows.Count;
+            var categorias = productos.AsEnumerable()
+                .Select(row => row.Field<string>("Categoria"))
+                .Distinct()
+                .OrderBy(cat => cat)
+                .ToList();
+
+            StringBuilder htmlBuilder = new StringBuilder();
+
+            htmlBuilder.AppendLine("<!DOCTYPE html>");
+            htmlBuilder.AppendLine("<html lang='es'>");
+            htmlBuilder.AppendLine("<head>");
+            htmlBuilder.AppendLine("  <meta charset='UTF-8'>");
+            htmlBuilder.AppendLine("  <title>Reporte de Inventario</title>");
+            htmlBuilder.AppendLine("  <style>");
+            htmlBuilder.AppendLine("    body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }");
+            htmlBuilder.AppendLine("    h1 { text-align: center; color: #2c3e50; }");
+            htmlBuilder.AppendLine("    .categoria { font-size: 20px; font-weight: bold; background-color: #34495e; color: white; padding: 10px; margin-top: 30px; border-radius: 5px; }");
+            htmlBuilder.AppendLine("    table { width: 100%; border-collapse: collapse; margin-top: 10px; background-color: white; box-shadow: 0 0 5px rgba(0,0,0,0.1); }");
+            htmlBuilder.AppendLine("    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }");
+            htmlBuilder.AppendLine("    th { background-color: #2980b9; color: white; }");
+            htmlBuilder.AppendLine("    tr:nth-child(even) { background-color: #f9f9f9; }");
+            htmlBuilder.AppendLine("    .bajo-stock { background-color: #e74c3c; color: white; font-weight: bold; }");
+            htmlBuilder.AppendLine("    .resumen { margin-top: 40px; background-color: #ecf0f1; padding: 20px; border-radius: 10px; }");
+            htmlBuilder.AppendLine("    .resumen h3 { color: #2c3e50; }");
+            htmlBuilder.AppendLine("    .resumen p { font-size: 16px; }");
+            htmlBuilder.AppendLine("  </style>");
+            htmlBuilder.AppendLine("</head>");
+            htmlBuilder.AppendLine("<body>");
+            htmlBuilder.AppendLine("<h1>Reporte de Inventario</h1>");
+
+            foreach (var categoria in categorias)
+            {
+                var productosCategoria = productos.Select($"Categoria = '{categoria}'");
+                decimal valorCategoria = productosCategoria.Sum(p =>
+                Convert.ToDecimal(p["Precio"]) * Convert.ToInt32(p["Stock"]));
+
+                htmlBuilder.AppendLine($"  <div class='categoria'>{categoria.ToUpper()} (Total: {valorCategoria.ToString("C", new CultureInfo("es-AR"))})</div>");
+                htmlBuilder.AppendLine("  <table>");
+                htmlBuilder.AppendLine("    <tr>");
+                htmlBuilder.AppendLine("      <th>Código</th>");
+                htmlBuilder.AppendLine("      <th>Nombre</th>");
+                htmlBuilder.AppendLine("      <th>Descripción</th>");
+                htmlBuilder.AppendLine("      <th>Precio</th>");
+                htmlBuilder.AppendLine("      <th>Stock</th>");
+                htmlBuilder.AppendLine("      <th>Valor Total</th>");
+                htmlBuilder.AppendLine("    </tr>");
+
+                foreach (DataRow row in productosCategoria)
+                {
+                    decimal precio = Convert.ToDecimal(row["Precio"]);
+                    int stock = Convert.ToInt32(row["Stock"]);
+                    decimal valorTotal = precio * stock;
+                    valorTotalInventario += valorTotal;
+
+                    bool bajoStock = stock < 10;
+                    string claseStock = bajoStock ? "class='bajo-stock'" : "";
+
+                    htmlBuilder.AppendLine("    <tr>");
+                    htmlBuilder.AppendLine($"      <td>{row["Codigo"]}</td>");
+                    htmlBuilder.AppendLine($"      <td>{row["Nombre"]}</td>");
+                    htmlBuilder.AppendLine($"      <td>{row["Descripcion"]}</td>");
+                    htmlBuilder.AppendLine($"      <td>{precio.ToString("C", new CultureInfo("es-AR"))}</td>");
+                    htmlBuilder.AppendLine($"      <td {claseStock}>{stock}</td>");
+                    htmlBuilder.AppendLine($"      <td>{valorTotal.ToString("C", new CultureInfo("es-AR"))}</td>");
+                    htmlBuilder.AppendLine("    </tr>");
+                }
+
+                htmlBuilder.AppendLine("  </table>");
+            }
+
+            htmlBuilder.AppendLine("  <div class='resumen'>");
+            htmlBuilder.AppendLine("    <h3>Resumen General</h3>");
+            htmlBuilder.AppendLine($"    <p><strong>Total de Productos:</strong> {totalProductos}</p>");
+            htmlBuilder.AppendLine($"    <p><strong>Categorías:</strong> {categorias.Count}</p>");
+            htmlBuilder.AppendLine($"    <p><strong>Valor Total del Inventario:</strong> {valorTotalInventario.ToString("C", new CultureInfo("es-AR"))}</p>");
+            htmlBuilder.AppendLine("  </div>");
+
+            htmlBuilder.AppendLine("</body>");
+            htmlBuilder.AppendLine("</html>");
+
+            return htmlBuilder.ToString();
+        }
+
+        private void MostrarEnNavegador(string htmlContent)
+        {
+            string tempFile = Path.Combine(Path.GetTempPath(), $"ReporteInventario_{DateTime.Now:yyyyMMddHHmmss}.html");
+            File.WriteAllText(tempFile, htmlContent);
+
+            Process.Start(new ProcessStartInfo(tempFile) { UseShellExecute = true });
+        }
+
+        private void GuardarReporte(string htmlContent)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "Archivo HTML|*.html";
+            saveDialog.Title = "Guardar Reporte de Productos";
+            saveDialog.FileName = $"ReporteInventario_{DateTime.Now:yyyyMMdd}.html";
+
+            if (saveDialog.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(saveDialog.FileName, htmlContent);
+                MessageBox.Show($"Reporte guardado en:\n{saveDialog.FileName}", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 }
+
 
