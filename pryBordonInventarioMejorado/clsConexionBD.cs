@@ -167,39 +167,33 @@ namespace pyInventario
             }
         }
 
-        public void buscarProductoPorID(string codigo, DataGridView dgvProductos)
+        public void buscarProductoPorTexto(string texto, DataGridView dgv)
         {
             try
             {
-                if (!int.TryParse(codigo, out int codigoNumerico))
-                {
-                    MessageBox.Show("Por favor ingrese un código numérico válido.");
-                    return;
-                }
-
                 using (SqlConnection conexion = new SqlConnection(cadena))
                 using (SqlCommand comando = new SqlCommand())
                 {
                     comando.Connection = conexion;
                     comando.CommandType = CommandType.Text;
-                    comando.CommandText = "SELECT * FROM Productos WHERE Codigo = @Codigo";
-                    comando.Parameters.AddWithValue("@Codigo", codigoNumerico);
 
-                    DataTable tablaProductos = new DataTable();
+                    comando.CommandText = "SELECT * FROM Productos WHERE Nombre LIKE @Texto";
+                    comando.Parameters.AddWithValue("@Texto", "%" + texto + "%");
 
-                    using (SqlDataAdapter adaptador = new SqlDataAdapter(comando))
-                    {
-                        adaptador.Fill(tablaProductos);
-                    }
+                    conexion.Open();
 
-                    if (tablaProductos.Rows.Count > 0)
+                    using (SqlDataReader lector = comando.ExecuteReader())
                     {
-                        dgvProductos.DataSource = tablaProductos;
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se encontró ningún producto con ese código.");
-                        dgvProductos.DataSource = null;
+                        if (!lector.HasRows)
+                        {
+                            MessageBox.Show("No se encontraron productos con ese nombre");
+                            dgv.DataSource = null;
+                            return;
+                        }
+
+                        DataTable tabla = new DataTable();
+                        tabla.Load(lector);
+                        dgv.DataSource = tabla;
                     }
                 }
             }

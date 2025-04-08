@@ -61,47 +61,25 @@ namespace pryBordonInventarioMejorado
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-        private void btnBuscar_Click(object sender, EventArgs e)
+        private void txtBuscarProducto_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                string codigo = txtBuscarProducto.Text.Trim();
-
-                if (string.IsNullOrEmpty(codigo))
-                {
-                    MessageBox.Show("Por favor ingrese un código para buscar.");
-                    return;
-                }
-
+                string texto = txtBuscarProducto.Text.Trim();
                 conexionBD BD = new conexionBD();
-                BD.buscarProductoPorID(codigo, dgvProductos);
+
+                if (string.IsNullOrEmpty(texto))
+                {
+                    BD.mostrarProductos(dgvProductos);
+                }
+                else
+                {
+                    BD.buscarProductoPorTexto(texto, dgvProductos);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al realizar la búsqueda: {ex.Message}");
-            }
-
-            txtBuscarProducto.Text = "";
-        }
-
-        private void btnVerTodos_Click(object sender, EventArgs e)
-        {
-            conexionBD BD = new conexionBD();
-            BD.mostrarProductos(dgvProductos);
-        }
-
-        private void txtBuscarProducto_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-                MessageBox.Show("Solo se permiten números.");
-            }
-
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                btnBuscar.PerformClick();
-                e.Handled = true; 
+                MessageBox.Show($"Error al buscar producto: {ex.Message}");
             }
         }
     }

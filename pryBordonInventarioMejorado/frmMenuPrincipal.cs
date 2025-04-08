@@ -13,9 +13,9 @@ using pyInventario;
 
 namespace pryBordonInventarioMejorado
 {
-    public partial class Form1 : Form
+    public partial class frmMenuPrincipal : Form
     {
-        public Form1()
+        public frmMenuPrincipal()
         {
             InitializeComponent();
         }
