@@ -32,33 +32,6 @@ namespace pyInventario
              cadena = "Server=localhost;Database=Productos;Trusted_Connection=True;";
         }
 
-        public int ObtenerIdCategoriaPorNombre(string nombreCategoria)
-        {
-            int id = -1;
-
-            try
-            {
-                using (SqlConnection conexion = new SqlConnection(cadena))
-                using (SqlCommand comando = new SqlCommand("SELECT Id FROM Categorias WHERE Nombre = @Nombre", conexion))
-                {
-                    comando.Parameters.AddWithValue("@Nombre", nombreCategoria);
-                    conexion.Open();
-
-                    var resultado = comando.ExecuteScalar();
-                    if (resultado != null)
-                    {
-                        id = Convert.ToInt32(resultado);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al obtener ID de la categoría: {ex.Message}");
-            }
-
-            return id;
-        }
-
         public void mostrarProductos(DataGridView dgvProductos)
         {
             try
