@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace pyInventario
 {
-    public class Productos
+    public class clsProductos
     {
         public int Codigo { get; set; }
         public string Nombre { get; set; }

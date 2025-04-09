@@ -42,7 +42,7 @@ namespace pryBordonInventarioMejorado
         {
             try
             {
-                Productos productoNuevo = new Productos();
+                clsProductos productoNuevo = new clsProductos();
                 conexionBD BD = new conexionBD();
 
                 productoNuevo.Nombre = txtNombre.Text;

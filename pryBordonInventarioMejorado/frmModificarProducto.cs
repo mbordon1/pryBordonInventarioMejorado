@@ -63,7 +63,7 @@ namespace pryBordonInventarioMejorado
                 int codigoProducto = Convert.ToInt32(txtCodigo.Text);
                 int categoriaId = Convert.ToInt32(cmbCategorias.SelectedValue);
 
-                Productos productoActualizado = new Productos()
+                clsProductos productoActualizado = new clsProductos()
                 {
                     Codigo = codigoProducto,
                     Nombre = txtNombre.Text,

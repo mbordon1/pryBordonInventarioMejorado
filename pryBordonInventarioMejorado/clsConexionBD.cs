@@ -61,7 +61,7 @@ namespace pyInventario
             }
         }
 
-        public void agregarProducto(Productos producto)
+        public void agregarProducto(clsProductos producto)
         {
             using (SqlConnection conexion = new SqlConnection(cadena))
             {
@@ -81,7 +81,7 @@ namespace pyInventario
             }
         }
 
-        public void modificarProducto(Productos producto)
+        public void modificarProducto(clsProductos producto)
         {
             try
             {
