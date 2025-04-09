@@ -33,7 +33,6 @@ namespace pryBordonInventarioMejorado
         private void btnCerrar_Click(object sender, EventArgs e)
         {
           this.Close(); 
-
         }
 
         private void btnMaximizar_Click(object sender, EventArgs e)

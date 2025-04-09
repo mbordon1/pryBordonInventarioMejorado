@@ -36,25 +36,25 @@
             this.btnMaximizar = new System.Windows.Forms.PictureBox();
             this.btnCerrar = new System.Windows.Forms.PictureBox();
             this.MenuVertical = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
+            this.panelGenerarReporte = new System.Windows.Forms.Panel();
             this.btnReporte = new System.Windows.Forms.Button();
-            this.panel4 = new System.Windows.Forms.Panel();
+            this.panelModificar = new System.Windows.Forms.Panel();
             this.btnModificarProducto = new System.Windows.Forms.Button();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.panelEliminar = new System.Windows.Forms.Panel();
             this.btnEliminar = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panelAgregar = new System.Windows.Forms.Panel();
             this.btnAgregar = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelProductos = new System.Windows.Forms.Panel();
             this.btnProductos = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.panelContenedor = new System.Windows.Forms.Panel();
+            this.picLogo = new System.Windows.Forms.PictureBox();
+            this.panelVerticalMenu = new System.Windows.Forms.Panel();
             this.panelTitulo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMinimizar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMaximizar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             this.MenuVertical.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // panelTitulo
@@ -127,30 +127,30 @@
             // MenuVertical
             // 
             this.MenuVertical.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(40)))));
-            this.MenuVertical.Controls.Add(this.panel5);
+            this.MenuVertical.Controls.Add(this.panelGenerarReporte);
             this.MenuVertical.Controls.Add(this.btnReporte);
-            this.MenuVertical.Controls.Add(this.panel4);
+            this.MenuVertical.Controls.Add(this.panelModificar);
             this.MenuVertical.Controls.Add(this.btnModificarProducto);
-            this.MenuVertical.Controls.Add(this.panel3);
+            this.MenuVertical.Controls.Add(this.panelEliminar);
             this.MenuVertical.Controls.Add(this.btnEliminar);
-            this.MenuVertical.Controls.Add(this.panel2);
+            this.MenuVertical.Controls.Add(this.panelAgregar);
             this.MenuVertical.Controls.Add(this.btnAgregar);
-            this.MenuVertical.Controls.Add(this.panel1);
+            this.MenuVertical.Controls.Add(this.panelProductos);
             this.MenuVertical.Controls.Add(this.btnProductos);
-            this.MenuVertical.Controls.Add(this.pictureBox1);
+            this.MenuVertical.Controls.Add(this.picLogo);
             this.MenuVertical.Dock = System.Windows.Forms.DockStyle.Left;
             this.MenuVertical.Location = new System.Drawing.Point(0, 35);
             this.MenuVertical.Name = "MenuVertical";
             this.MenuVertical.Size = new System.Drawing.Size(269, 580);
             this.MenuVertical.TabIndex = 1;
             // 
-            // panel5
+            // panelGenerarReporte
             // 
-            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel5.Location = new System.Drawing.Point(0, 267);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(5, 32);
-            this.panel5.TabIndex = 8;
+            this.panelGenerarReporte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.panelGenerarReporte.Location = new System.Drawing.Point(0, 267);
+            this.panelGenerarReporte.Name = "panelGenerarReporte";
+            this.panelGenerarReporte.Size = new System.Drawing.Size(5, 32);
+            this.panelGenerarReporte.TabIndex = 8;
             // 
             // btnReporte
             // 
@@ -170,13 +170,13 @@
             this.btnReporte.UseVisualStyleBackColor = false;
             this.btnReporte.Click += new System.EventHandler(this.btnReporte_Click);
             // 
-            // panel4
+            // panelModificar
             // 
-            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel4.Location = new System.Drawing.Point(0, 229);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(5, 32);
-            this.panel4.TabIndex = 6;
+            this.panelModificar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.panelModificar.Location = new System.Drawing.Point(0, 229);
+            this.panelModificar.Name = "panelModificar";
+            this.panelModificar.Size = new System.Drawing.Size(5, 32);
+            this.panelModificar.TabIndex = 6;
             // 
             // btnModificarProducto
             // 
@@ -196,13 +196,13 @@
             this.btnModificarProducto.UseVisualStyleBackColor = false;
             this.btnModificarProducto.Click += new System.EventHandler(this.btnModificarProducto_Click);
             // 
-            // panel3
+            // panelEliminar
             // 
-            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel3.Location = new System.Drawing.Point(0, 191);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(5, 32);
-            this.panel3.TabIndex = 4;
+            this.panelEliminar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.panelEliminar.Location = new System.Drawing.Point(0, 191);
+            this.panelEliminar.Name = "panelEliminar";
+            this.panelEliminar.Size = new System.Drawing.Size(5, 32);
+            this.panelEliminar.TabIndex = 4;
             // 
             // btnEliminar
             // 
@@ -222,13 +222,13 @@
             this.btnEliminar.UseVisualStyleBackColor = false;
             this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
             // 
-            // panel2
+            // panelAgregar
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel2.Location = new System.Drawing.Point(0, 153);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(5, 32);
-            this.panel2.TabIndex = 3;
+            this.panelAgregar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.panelAgregar.Location = new System.Drawing.Point(0, 153);
+            this.panelAgregar.Name = "panelAgregar";
+            this.panelAgregar.Size = new System.Drawing.Size(5, 32);
+            this.panelAgregar.TabIndex = 3;
             // 
             // btnAgregar
             // 
@@ -248,13 +248,13 @@
             this.btnAgregar.UseVisualStyleBackColor = false;
             this.btnAgregar.Click += new System.EventHandler(this.btnAgregar_Click);
             // 
-            // panel1
+            // panelProductos
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel1.Location = new System.Drawing.Point(0, 115);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(5, 32);
-            this.panel1.TabIndex = 2;
+            this.panelProductos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.panelProductos.Location = new System.Drawing.Point(0, 115);
+            this.panelProductos.Name = "panelProductos";
+            this.panelProductos.Size = new System.Drawing.Size(5, 32);
+            this.panelProductos.TabIndex = 2;
             // 
             // btnProductos
             // 
@@ -274,35 +274,35 @@
             this.btnProductos.UseVisualStyleBackColor = false;
             this.btnProductos.Click += new System.EventHandler(this.btnProductos_Click);
             // 
-            // pictureBox1
+            // picLogo
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(269, 98);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.picLogo.Image = ((System.Drawing.Image)(resources.GetObject("picLogo.Image")));
+            this.picLogo.Location = new System.Drawing.Point(0, 0);
+            this.picLogo.Name = "picLogo";
+            this.picLogo.Size = new System.Drawing.Size(269, 98);
+            this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picLogo.TabIndex = 0;
+            this.picLogo.TabStop = false;
             // 
-            // panelContenedor
+            // panelVerticalMenu
             // 
-            this.panelContenedor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(45)))), ((int)(((byte)(55)))));
-            this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContenedor.Location = new System.Drawing.Point(269, 35);
-            this.panelContenedor.Name = "panelContenedor";
-            this.panelContenedor.Size = new System.Drawing.Size(1031, 580);
-            this.panelContenedor.TabIndex = 2;
+            this.panelVerticalMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(45)))), ((int)(((byte)(55)))));
+            this.panelVerticalMenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelVerticalMenu.Location = new System.Drawing.Point(269, 35);
+            this.panelVerticalMenu.Name = "panelVerticalMenu";
+            this.panelVerticalMenu.Size = new System.Drawing.Size(1031, 580);
+            this.panelVerticalMenu.TabIndex = 2;
             // 
-            // Form1
+            // frmMenuPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1300, 615);
-            this.Controls.Add(this.panelContenedor);
+            this.Controls.Add(this.panelVerticalMenu);
             this.Controls.Add(this.MenuVertical);
             this.Controls.Add(this.panelTitulo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "Form1";
+            this.Name = "frmMenuPrincipal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -312,7 +312,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnMaximizar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).EndInit();
             this.MenuVertical.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -321,21 +321,21 @@
 
         private System.Windows.Forms.Panel panelTitulo;
         private System.Windows.Forms.Panel MenuVertical;
-        private System.Windows.Forms.Panel panelContenedor;
+        private System.Windows.Forms.Panel panelVerticalMenu;
         private System.Windows.Forms.PictureBox btnCerrar;
         private System.Windows.Forms.PictureBox btnMaximizar;
         private System.Windows.Forms.PictureBox btnRestaurar;
         private System.Windows.Forms.PictureBox btnMinimizar;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.Button btnProductos;
-        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel panelModificar;
         private System.Windows.Forms.Button btnModificarProducto;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panelEliminar;
         private System.Windows.Forms.Button btnEliminar;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelAgregar;
         private System.Windows.Forms.Button btnAgregar;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Panel panelProductos;
+        private System.Windows.Forms.Panel panelGenerarReporte;
         private System.Windows.Forms.Button btnReporte;
     }
 }

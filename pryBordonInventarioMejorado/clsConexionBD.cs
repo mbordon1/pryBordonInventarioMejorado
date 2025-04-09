@@ -9,15 +9,6 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 using System.Diagnostics;
-using iText.Kernel.Pdf;
-using iText.Layout;
-using iText.Layout.Element;
-using iText.Kernel.Font;
-using iText.IO.Font.Constants;
-using iText.IO.Font;
-using iText.Kernel.Colors;
-using iText.Layout.Properties;
-using iText.Bouncycastleconnector;
 using System.Globalization;
 
 
@@ -29,7 +20,7 @@ namespace pyInventario
 
         public conexionBD()
         {
-             cadena = "Server=localhost;Database=Productos;Trusted_Connection=True;";
+            cadena = "Server=localhost;Database=Productos;Trusted_Connection=True;";
         }
 
         public void mostrarProductos(DataGridView dgvProductos)

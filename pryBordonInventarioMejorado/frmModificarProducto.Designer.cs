@@ -47,7 +47,7 @@
             this.btnMinimizar = new System.Windows.Forms.PictureBox();
             this.btnMaximizar = new System.Windows.Forms.PictureBox();
             this.btnCerrar = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblModificarProducto = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
             this.lblCodigo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).BeginInit();
@@ -207,7 +207,7 @@
             this.panelTitulo.Controls.Add(this.btnMinimizar);
             this.panelTitulo.Controls.Add(this.btnMaximizar);
             this.panelTitulo.Controls.Add(this.btnCerrar);
-            this.panelTitulo.Controls.Add(this.label1);
+            this.panelTitulo.Controls.Add(this.lblModificarProducto);
             this.panelTitulo.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTitulo.Location = new System.Drawing.Point(0, 0);
             this.panelTitulo.Name = "panelTitulo";
@@ -264,16 +264,16 @@
             this.btnCerrar.TabStop = false;
             this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
             // 
-            // label1
+            // lblModificarProducto
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(187, 22);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Modificar producto";
+            this.lblModificarProducto.AutoSize = true;
+            this.lblModificarProducto.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblModificarProducto.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblModificarProducto.Location = new System.Drawing.Point(12, 9);
+            this.lblModificarProducto.Name = "lblModificarProducto";
+            this.lblModificarProducto.Size = new System.Drawing.Size(187, 22);
+            this.lblModificarProducto.TabIndex = 0;
+            this.lblModificarProducto.Text = "Modificar producto";
             // 
             // txtCodigo
             // 
@@ -356,7 +356,7 @@
         private System.Windows.Forms.PictureBox btnMinimizar;
         private System.Windows.Forms.PictureBox btnMaximizar;
         private System.Windows.Forms.PictureBox btnCerrar;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblModificarProducto;
         private System.Windows.Forms.TextBox txtCodigo;
         private System.Windows.Forms.Label lblCodigo;
     }

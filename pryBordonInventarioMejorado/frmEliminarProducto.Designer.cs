@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEliminarProducto));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblIntroduzca = new System.Windows.Forms.Label();
             this.txtCodigoEliminar = new System.Windows.Forms.TextBox();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.panelTitulo = new System.Windows.Forms.Panel();
@@ -48,16 +48,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).BeginInit();
             this.SuspendLayout();
             // 
-            // label2
+            // lblIntroduzca
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(233, 75);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(236, 17);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Introduzca el codigo del producto:";
+            this.lblIntroduzca.AutoSize = true;
+            this.lblIntroduzca.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIntroduzca.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblIntroduzca.Location = new System.Drawing.Point(233, 75);
+            this.lblIntroduzca.Name = "lblIntroduzca";
+            this.lblIntroduzca.Size = new System.Drawing.Size(236, 17);
+            this.lblIntroduzca.TabIndex = 5;
+            this.lblIntroduzca.Text = "Introduzca el codigo del producto:";
             // 
             // txtCodigoEliminar
             // 
@@ -182,7 +182,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(45)))), ((int)(((byte)(55)))));
             this.ClientSize = new System.Drawing.Size(726, 413);
             this.Controls.Add(this.dgvProductos);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblIntroduzca);
             this.Controls.Add(this.txtCodigoEliminar);
             this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.panelTitulo);
@@ -205,7 +205,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblIntroduzca;
         private System.Windows.Forms.TextBox txtCodigoEliminar;
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.Panel panelTitulo;
