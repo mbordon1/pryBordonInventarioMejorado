@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace pryBordonInventarioMejorado
@@ -10,6 +11,7 @@ namespace pryBordonInventarioMejorado
     {
         clsContactosCRUD crudContactos = new clsContactosCRUD();
         DataTable tablaContactos;
+        DataTable contactosOriginales;
 
         public frmContactos()
         {
@@ -69,6 +71,9 @@ namespace pryBordonInventarioMejorado
         private void CargarContactos()
         {
             tablaContactos = crudContactos.ObtenerContactos();
+
+            contactosOriginales = tablaContactos.Copy();
+
             dgvContactos.DataSource = tablaContactos;
 
             dgvContactos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -143,18 +148,68 @@ namespace pryBordonInventarioMejorado
 
         private void btnGuardarCambios_Click(object sender, EventArgs e)
         {
-            DataTable cambios = (DataTable)dgvContactos.DataSource;
+            bool cambiosDetectados = false;
 
-            DataRow[] filasModificadas = cambios.Select("RowState = 'Modified'");
-
-            if (filasModificadas.Length > 0)
+            foreach (DataGridViewRow fila in dgvContactos.Rows)
             {
-                crudContactos.ActualizarCambiosDesdeDataTable(cambios);
-                MessageBox.Show("💾Cambios guardados correctamente", "Guardado", MessageBoxButtons.OK, MessageBoxIcon.Information); 
+                if (fila.IsNewRow) continue;
+
+                int id = Convert.ToInt32(fila.Cells["Id"].Value);
+                var contactoOriginal = contactosOriginales.Rows
+                    .Cast<DataRow>()
+                    .FirstOrDefault(r => Convert.ToInt32(r["Id"]) == id);
+
+                if (contactoOriginal != null)
+                {
+                    bool haCambiado = false;
+
+                    string nombre = fila.Cells["NombreApellido"].Value?.ToString();
+                    string telefono = fila.Cells["Telefono"].Value?.ToString();
+                    string correo = fila.Cells["Correo"].Value?.ToString();
+                    string categoriaNombre = fila.Cells["Categoria"].Value?.ToString();
+                    int categoriaId = crudContactos.ObtenerCategoriaIdPorNombre(categoriaNombre);
+
+                    if (contactoOriginal["NombreApellido"].ToString() != nombre ||
+                        contactoOriginal["Telefono"].ToString() != telefono ||
+                        contactoOriginal["Correo"].ToString() != correo ||
+                        Convert.ToInt32(contactoOriginal["CategoriaId"]) != categoriaId)
+                    {
+                        haCambiado = true;
+                    }
+
+                    if (haCambiado)
+                    {
+                        cambiosDetectados = true;
+
+                        clsContacto contactoModificado = new clsContacto()
+                        {
+                            Id = id,
+                            NombreApellido = nombre,
+                            Telefono = telefono,
+                            Correo = correo,
+                            CategoriaId = categoriaId
+                        };
+
+                        try
+                        {
+                            crudContactos.ModificarContacto(contactoModificado);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error al guardar cambios: " + ex.Message);
+                            return;
+                        }
+                    }
+                }
+            }
+            if (cambiosDetectados)
+            {
+                MessageBox.Show("✅ Cambios guardados correctamente.");
+                CargarContactos();
             }
             else
             {
-                MessageBox.Show("No hay cambios para guardar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se detectaron cambios.");
             }
         }
 
@@ -179,30 +234,5 @@ namespace pryBordonInventarioMejorado
         {
             CargarContactos();
         }
-
-        private void dgvContactos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && dgvContactos.Columns[e.ColumnIndex].Name != "Id")
-            {
-                DataGridViewRow row = dgvContactos.Rows[e.RowIndex];
-                if (row != null)
-                {
-                    DataRow dataRow = ((DataRowView)row.DataBoundItem).Row;
-                    dataRow.SetModified();
-                }
-            }
-        }
-
-        private void dgvContactos_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            DataGridViewRow row = dgvContactos.Rows[e.RowIndex];
-            DataRow dataRow = ((DataRowView)row.DataBoundItem).Row;
-
-            dataRow.AcceptChanges();
-        }
     }
 }
-
-
-
-

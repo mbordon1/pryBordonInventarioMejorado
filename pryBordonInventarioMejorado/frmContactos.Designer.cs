@@ -69,8 +69,6 @@
             this.dgvContactos.Name = "dgvContactos";
             this.dgvContactos.Size = new System.Drawing.Size(730, 242);
             this.dgvContactos.TabIndex = 34;
-            this.dgvContactos.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContactos_CellEndEdit);
-            this.dgvContactos.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContactos_CellValueChanged);
             // 
             // btnEliminar
             // 

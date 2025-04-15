@@ -43,12 +43,33 @@ namespace pryBordonInventarioMejorado
             BD.EjecutarComando(CrearComando(consulta, new Dictionary<string, object> { { "@Id", id } }));
         }
 
+        public void ModificarContacto(clsContacto contacto)
+        {
+            string consulta = @"UPDATE Contactos
+                        SET NombreApellido = @NombreApellido,
+                            Telefono = @Telefono,
+                            Correo = @Correo,
+                            CategoriaId = @CategoriaId
+                        WHERE Id = @Id";
+
+            SqlCommand comando = CrearComando(consulta, new Dictionary<string, object>
+            {
+            { "@Id", contacto.Id },
+            { "@NombreApellido", contacto.NombreApellido },
+            { "@Telefono", contacto.Telefono },
+            { "@Correo", contacto.Correo },
+            { "@CategoriaId", contacto.CategoriaId }
+            });
+
+            BD.EjecutarComando(comando);
+        }
+
         public DataTable ObtenerContactos()
         {
             string consulta = @"
-                SELECT c.Id, c.NombreApellido, c.Telefono, c.Correo, cat.Nombre AS Categoria
-                FROM Contactos c
-                LEFT JOIN CategoriasContactos cat ON c.CategoriaId = cat.Id";
+            SELECT c.Id, c.NombreApellido, c.Telefono, c.Correo, cat.Nombre AS Categoria, c.CategoriaId
+            FROM Contactos c
+            LEFT JOIN CategoriasContactos cat ON c.CategoriaId = cat.Id";
             return BD.EjecutarConsulta(CrearComando(consulta));
         }
 
@@ -67,32 +88,17 @@ namespace pryBordonInventarioMejorado
 
         public void ActualizarCambiosDesdeDataTable(DataTable cambios)
         {
-            if (!cambios.Columns.Contains("CategoriaId"))
-            {
-                cambios.Columns.Add("CategoriaId", typeof(int));
-            }
-
-            foreach (DataRow fila in cambios.Rows)
-            {
-                if (fila.RowState == DataRowState.Modified || fila.RowState == DataRowState.Added)
-                {
-                    fila["CategoriaId"] = ObtenerCategoriaIdPorNombre(fila["Categoria"].ToString());
-                }
-            }
-
-            foreach (DataRow fila in cambios.Rows)
-            {
-                if (fila.RowState == DataRowState.Modified)
-                {
-                    Console.WriteLine($"Modificado: {fila["Id"]}, {fila["CategoriaId"]}");
-                }
-            }
-
             using (SqlConnection conexion = new SqlConnection(BD.cadenaConexion))
             {
                 conexion.Open();
+
                 SqlDataAdapter adaptador = new SqlDataAdapter("SELECT Id, NombreApellido, Telefono, Correo, CategoriaId FROM Contactos", conexion);
                 SqlCommandBuilder builder = new SqlCommandBuilder(adaptador);
+
+                if (cambios.Columns.Contains("Categoria"))
+                {
+                    cambios.Columns.Remove("Categoria");
+                }
 
                 try
                 {
@@ -100,11 +106,14 @@ namespace pryBordonInventarioMejorado
                 }
                 catch (DBConcurrencyException ex)
                 {
-                    MessageBox.Show($"Error de simultaneidad: {ex.Message}", "Error de simultaneidad", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error de concurrencia: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error general al actualizar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
-
 
         public DataTable ObtenerCategorias()
         {
@@ -112,22 +121,17 @@ namespace pryBordonInventarioMejorado
             return BD.EjecutarConsulta(CrearComando(consulta));
         }
 
-        public int ObtenerCategoriaIdPorNombre(string categoriaNombre)
+        public int ObtenerCategoriaIdPorNombre(string nombre)
         {
             string consulta = "SELECT Id FROM CategoriasContactos WHERE Nombre = @Nombre";
-            var parametros = new Dictionary<string, object>
-            {
-               { "@Nombre", categoriaNombre }
-            };
-
-            DataTable resultado = BD.EjecutarConsulta(CrearComando(consulta, parametros));
+            SqlCommand comando = new SqlCommand(consulta);
+            comando.Parameters.AddWithValue("@Nombre", nombre);
+            DataTable resultado = BD.EjecutarConsulta(comando);
 
             if (resultado.Rows.Count > 0)
-            {
                 return Convert.ToInt32(resultado.Rows[0]["Id"]);
-            }
 
-            return 0;
+            throw new Exception("Categoría no encontrada: " + nombre);
         }
     }
 }
