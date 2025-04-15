@@ -10,29 +10,44 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using pyInventario;
 
-
 namespace pryBordonInventarioMejorado
 {
     public partial class frmMenuPrincipal : Form
     {
-        public frmMenuPrincipal()
+        private clsUsuario usuarioActual;
+
+        public frmMenuPrincipal(clsUsuario usuario)
         {
             InitializeComponent();
+            usuarioActual = usuario;
+
+            lblUsuario.Text = $"Bienvenido, {usuarioActual.NombreUsuario} ({usuarioActual.Rol})";
+
+            AplicarPermisosPorRol();
         }
 
-        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-        private extern static void ReleaseCapture();
-        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
-
-        private void Form1_Load(object sender, EventArgs e)
+        private void frmMenuPrincipal_Load(object sender, EventArgs e)
         {
-            conexionBD BD = new conexionBD();            
+            conexionBD BD = new conexionBD();
+        }
+
+        private void AplicarPermisosPorRol()
+        {
+            if (usuarioActual.Rol == "Empleado")
+            {
+                btnEliminar.Visible = false;
+                btnModificarProducto.Visible = false;
+            }
+        }
+
+        private void AbrirFormulario(Form formulario)
+        {
+            formulario.ShowDialog();
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)
         {
-           Application.Exit();
+            Application.Exit();
         }
 
         private void btnMaximizar_Click(object sender, EventArgs e)
@@ -46,7 +61,7 @@ namespace pryBordonInventarioMejorado
         {
             this.WindowState = FormWindowState.Normal;
             btnRestaurar.Visible = false;
-            btnMaximizar .Visible = true;
+            btnMaximizar.Visible = true;
         }
 
         private void btnMinimizar_Click(object sender, EventArgs e)
@@ -54,12 +69,13 @@ namespace pryBordonInventarioMejorado
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void btnModificarProducto_Click(object sender, EventArgs e)
-        {
-            frmModificarProducto v = new frmModificarProducto();
-            v.ShowDialog();
-        }
-      
+        // Movimiento del formulario
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+
         private void panelTitulo_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
@@ -68,26 +84,42 @@ namespace pryBordonInventarioMejorado
 
         private void btnProductos_Click(object sender, EventArgs e)
         {
-            frmProductos v = new frmProductos();
-            v.ShowDialog();
+            AbrirFormulario(new frmProductos());
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            frmAgregarProducto v = new frmAgregarProducto();
-            v.ShowDialog();
+            AbrirFormulario(new frmAgregarProducto());
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            frmEliminarProducto v = new frmEliminarProducto();
-            v.ShowDialog();
+            AbrirFormulario(new frmEliminarProducto());
+        }
+
+        private void btnModificarProducto_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(new frmModificarProducto());
         }
 
         private void btnReporte_Click(object sender, EventArgs e)
         {
             clsReporteHTML reporte = new clsReporteHTML();
             reporte.GenerarVisualizarYDescargarReporteHTML();
-        }   
+        }
+
+        private void btnCerrarSesion_Click_1(object sender, EventArgs e)
+        {
+            this.Hide();
+            frmInicioDeSesion login = new frmInicioDeSesion();
+            login.Show();
+        }
+
+        private void btnContactos_Click(object sender, EventArgs e)
+        {
+            frmContactos Contactos = new frmContactos();
+            Contactos.Show();      
+        }
     }
 }
+
