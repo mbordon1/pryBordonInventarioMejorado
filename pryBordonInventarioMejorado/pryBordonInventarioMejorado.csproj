@@ -184,6 +184,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsConexionBD.cs" />
+    <Compile Include="clsProductosCRUD.cs" />
+    <Compile Include="clsReporteHTML.cs" />
     <Compile Include="frmAgregarProducto.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -195,6 +197,12 @@
     </Compile>
     <Compile Include="frmEliminarProducto.Designer.cs">
       <DependentUpon>frmEliminarProducto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmInicioDeSesion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInicioDeSesion.Designer.cs">
+      <DependentUpon>frmInicioDeSesion.cs</DependentUpon>
     </Compile>
     <Compile Include="frmModificarProducto.cs">
       <SubType>Form</SubType>

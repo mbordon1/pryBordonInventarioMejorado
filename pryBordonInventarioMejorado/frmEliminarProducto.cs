@@ -13,6 +13,8 @@ namespace pryBordonInventarioMejorado
 {
     public partial class frmEliminarProducto : Form
     {
+        private clsProductosCRUD productosCRUD = new clsProductosCRUD();
+
         public frmEliminarProducto()
         {
             InitializeComponent();
@@ -20,35 +22,53 @@ namespace pryBordonInventarioMejorado
 
         private void frmEliminarProducto_Load(object sender, EventArgs e)
         {
-            conexionBD BD = new conexionBD();
-            BD.mostrarProductos(dgvProductos);
+            MessageBox.Show("Por favor, seleccione la fila del producto que desea eliminar");
+            CargarProductos();
+        }
+
+        private void CargarProductos()
+        {
+            DataTable productos = productosCRUD.ObtenerProductos();
+            if (productos != null)
+            {
+                dgvProductos.DataSource = productos;
+            }
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            try
+            if (dgvProductos.SelectedRows.Count == 0)
             {
-                conexionBD BD = new conexionBD();
-                string ID = txtCodigoEliminar.Text;
+                btnEliminar.Enabled = false;
+                MessageBox.Show("Seleccione un producto de la lista para eliminar.");
+                return;
+            }
+            else
+            {
+                btnEliminar.Enabled=true;
+                DataGridViewRow filaSeleccionada = dgvProductos.SelectedRows[0];
 
-                if (string.IsNullOrEmpty(ID))
+                string nombreProducto = filaSeleccionada.Cells["Nombre"].Value.ToString();
+
+                DialogResult confirmacion = MessageBox.Show(
+                    $"¿Está seguro que desea eliminar el producto '{nombreProducto}'?",
+                    "Confirmar eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (confirmacion == DialogResult.Yes)
                 {
-                    MessageBox.Show("Por favor ingrese un código de producto.");
-                    return;
+                    productosCRUD.EliminarProductoPorNombre(nombreProducto);
+
+                    CargarProductos();
                 }
-
-                BD.eliminarProducto(ID);
-                BD.mostrarProductos(dgvProductos);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al eliminar el producto: {ex.Message}");
-            }
+            }    
         }
-
         private void btnCerrar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
     }
 }
+

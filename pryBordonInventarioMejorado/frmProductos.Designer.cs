@@ -160,11 +160,11 @@
             this.lblIntroduzca.AutoSize = true;
             this.lblIntroduzca.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblIntroduzca.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblIntroduzca.Location = new System.Drawing.Point(316, 65);
+            this.lblIntroduzca.Location = new System.Drawing.Point(398, 65);
             this.lblIntroduzca.Name = "lblIntroduzca";
-            this.lblIntroduzca.Size = new System.Drawing.Size(236, 17);
+            this.lblIntroduzca.Size = new System.Drawing.Size(154, 17);
             this.lblIntroduzca.TabIndex = 1;
-            this.lblIntroduzca.Text = "Introduzca el codigo del producto:";
+            this.lblIntroduzca.Text = "Nombre del producto:";
             // 
             // frmProductos
             // 

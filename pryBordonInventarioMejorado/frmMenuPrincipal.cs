@@ -86,8 +86,8 @@ namespace pryBordonInventarioMejorado
 
         private void btnReporte_Click(object sender, EventArgs e)
         {
-            conexionBD BD = new conexionBD();
-            BD.GenerarVisualizarYDescargarReporteHTML();
+            clsReporteHTML reporte = new clsReporteHTML();
+            reporte.GenerarVisualizarYDescargarReporteHTML();
         }   
     }
 }

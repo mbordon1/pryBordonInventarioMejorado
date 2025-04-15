@@ -19,6 +19,8 @@ namespace pryBordonInventarioMejorado
             InitializeComponent();
         }
 
+        private clsProductosCRUD productosBD = new clsProductosCRUD();
+
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
@@ -26,10 +28,17 @@ namespace pryBordonInventarioMejorado
 
         private void frmProductos_Load(object sender, EventArgs e)
         {
-            conexionBD BD = new conexionBD();
-            BD.mostrarProductos(dgvProductos);
+            CargarProductos();
         }
 
+        public void CargarProductos()
+        {
+            DataTable productos = productosBD.ObtenerProductos();
+            if (productos != null)
+            {
+                dgvProductos.DataSource = productos;
+            }
+        }
         private void btnCerrar_Click(object sender, EventArgs e)
         {
           this.Close(); 
@@ -65,15 +74,15 @@ namespace pryBordonInventarioMejorado
             try
             {
                 string texto = txtBuscarProducto.Text.Trim();
-                conexionBD BD = new conexionBD();
 
                 if (string.IsNullOrEmpty(texto))
                 {
-                    BD.mostrarProductos(dgvProductos);
+                    CargarProductos();
                 }
                 else
                 {
-                    BD.buscarProductoPorTexto(texto, dgvProductos);
+                    DataTable productosFiltrados = productosBD.BuscarProductoPorTexto(texto);
+                    dgvProductos.DataSource = productosFiltrados;
                 }
             }
             catch (Exception ex)
