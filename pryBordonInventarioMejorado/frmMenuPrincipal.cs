@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using pyInventario;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace pryBordonInventarioMejorado
 {
     public partial class frmMenuPrincipal : Form
     {
-        private clsUsuario usuarioActual;
+        private clsUsuario usuarioActual; 
+        
 
         public frmMenuPrincipal(clsUsuario usuario)
         {
@@ -29,6 +31,7 @@ namespace pryBordonInventarioMejorado
         private void frmMenuPrincipal_Load(object sender, EventArgs e)
         {
             conexionBD BD = new conexionBD();
+            MostrarGraficoProductos();          
         }
 
         private void AplicarPermisosPorRol()
@@ -119,6 +122,41 @@ namespace pryBordonInventarioMejorado
         {
             frmContactos Contactos = new frmContactos();
             Contactos.Show();      
+        }
+
+        private void MostrarGraficoProductos()
+        {
+            clsProductosCRUD crud = new clsProductosCRUD();
+            DataTable datos = crud.ObtenerCantidadProductosPorCategoria();
+            int total = crud.ObtenerTotalProductos();
+            int bajoStock = crud.ObtenerProductosConBajoStock();
+
+            chartProductos.Series.Clear();
+
+            lblTotalProductos.Text = $"Total: {total} productos";
+            lblBajoStock.Text = $"Con Bajo Stock: {bajoStock}";
+
+            Series serie = new Series
+            {
+                ChartType = SeriesChartType.Pie,
+                IsValueShownAsLabel = true,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+
+            foreach (DataRow fila in datos.Rows)
+            {
+                string categoria = fila["Categoria"].ToString();
+                int cantidad = Convert.ToInt32(fila["Cantidad"]);
+                serie.Points.AddXY(categoria, cantidad);
+            }
+
+            chartProductos.Series.Add(serie);
+        }
+
+
+        private void panelTitulo_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

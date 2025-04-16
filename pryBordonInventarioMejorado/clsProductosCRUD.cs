@@ -109,6 +109,32 @@ namespace pryBordonInventarioMejorado
             SqlCommand comando = new SqlCommand(query);
             return Conexion.EjecutarConsulta(comando);
         }
+
+        public DataTable ObtenerCantidadProductosPorCategoria()
+        {
+            string query = "SELECT c.Nombre AS Categoria, COUNT(p.Codigo) AS Cantidad " +
+                           "FROM Productos p " +
+                           "INNER JOIN Categorias c ON p.CategoriaId = c.Id " +
+                           "GROUP BY c.Nombre";
+
+            SqlCommand comando = new SqlCommand(query);
+            return Conexion.EjecutarConsulta(comando);
+        }
+
+        public int ObtenerTotalProductos()
+        {
+            string query = "SELECT COUNT(*) FROM Productos";
+            SqlCommand comando = new SqlCommand(query);
+            return Convert.ToInt32(Conexion.EjecutarEscalar(comando));
+        }
+
+        public int ObtenerProductosConBajoStock()
+        {
+            string query = "SELECT COUNT(*) FROM Productos WHERE Stock < 5";
+            SqlCommand comando = new SqlCommand(query);
+            return Convert.ToInt32(Conexion.EjecutarEscalar(comando));
+        }
+
     }
 
 }

@@ -42,6 +42,8 @@
             this.lblTitulo = new System.Windows.Forms.Label();
             this.btnRegistrar = new System.Windows.Forms.Button();
             this.lblRegistro = new System.Windows.Forms.Label();
+            this.lblEstado = new System.Windows.Forms.Label();
+            this.progressBarLogin = new System.Windows.Forms.ProgressBar();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -56,7 +58,7 @@
             this.btnIngresar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnIngresar.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnIngresar.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnIngresar.Location = new System.Drawing.Point(288, 308);
+            this.btnIngresar.Location = new System.Drawing.Point(288, 319);
             this.btnIngresar.Name = "btnIngresar";
             this.btnIngresar.Size = new System.Drawing.Size(105, 38);
             this.btnIngresar.TabIndex = 17;
@@ -68,7 +70,7 @@
             // 
             this.chkMostrarCont.AutoSize = true;
             this.chkMostrarCont.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkMostrarCont.Location = new System.Drawing.Point(419, 266);
+            this.chkMostrarCont.Location = new System.Drawing.Point(419, 270);
             this.chkMostrarCont.Name = "chkMostrarCont";
             this.chkMostrarCont.Size = new System.Drawing.Size(130, 18);
             this.chkMostrarCont.TabIndex = 16;
@@ -181,7 +183,7 @@
             this.btnRegistrar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Purple;
             this.btnRegistrar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Purple;
             this.btnRegistrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRegistrar.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegistrar.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegistrar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
             this.btnRegistrar.Location = new System.Drawing.Point(11, 348);
             this.btnRegistrar.Name = "btnRegistrar";
@@ -202,11 +204,31 @@
             this.lblRegistro.TabIndex = 9;
             this.lblRegistro.Text = "Registra tu cuenta";
             // 
+            // lblEstado
+            // 
+            this.lblEstado.ForeColor = System.Drawing.Color.Gray;
+            this.lblEstado.Location = new System.Drawing.Point(285, 268);
+            this.lblEstado.Name = "lblEstado";
+            this.lblEstado.Size = new System.Drawing.Size(128, 20);
+            this.lblEstado.TabIndex = 0;
+            // 
+            // progressBarLogin
+            // 
+            this.progressBarLogin.Location = new System.Drawing.Point(288, 294);
+            this.progressBarLogin.MarqueeAnimationSpeed = 50;
+            this.progressBarLogin.Name = "progressBarLogin";
+            this.progressBarLogin.Size = new System.Drawing.Size(200, 10);
+            this.progressBarLogin.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBarLogin.TabIndex = 18;
+            this.progressBarLogin.Visible = false;
+            // 
             // frmInicioDeSesion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(585, 400);
+            this.Controls.Add(this.progressBarLogin);
+            this.Controls.Add(this.lblEstado);
             this.Controls.Add(this.btnIngresar);
             this.Controls.Add(this.chkMostrarCont);
             this.Controls.Add(this.txtContrasena);
@@ -244,5 +266,7 @@
         private System.Windows.Forms.Label lblRegistro;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblTitulo;
+        private System.Windows.Forms.Label lblEstado;
+        private System.Windows.Forms.ProgressBar progressBarLogin;
     }
-}
+        }

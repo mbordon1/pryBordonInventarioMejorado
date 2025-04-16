@@ -82,6 +82,16 @@ namespace pyInventario
             }
             return dt;
         }
+
+        public object EjecutarEscalar(SqlCommand comando)
+        {
+            object resultado;
+            comando.Connection = conexion;
+            conexion.Open();
+            resultado = comando.ExecuteScalar();
+            conexion.Close();
+            return resultado;
+        }
     }
 }
 
