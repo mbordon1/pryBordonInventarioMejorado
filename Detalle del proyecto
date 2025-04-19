@@ -5,7 +5,7 @@ Sistema de inventario desarrollado en Windows Forms con C# y SQL Server, diseña
 🚀 Características principales
 
 - Gestión de productos y categorías (alta, baja, modificación, consulta).
-- Almacenamiento en base de datos SQL Server (migrado desde Access).
+- Almacenamiento en base de datos SQL Server.
 - Generación de reportes en HTML con totales, agrupación por categorías y advertencias visuales (por ejemplo, bajo stock).
 - Interfaz mejorada y amigable para el usuario.
 - Soporte para múltiples computadoras en red accediendo a la misma base de datos.
