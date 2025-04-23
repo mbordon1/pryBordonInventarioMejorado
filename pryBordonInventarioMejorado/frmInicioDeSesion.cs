@@ -12,12 +12,13 @@ namespace pryBordonInventarioMejorado
 {
     public partial class frmInicioDeSesion : Form
     {
-        private clsUsuarios usuarios;
+        private int intentosFallidos = 0;
+        private clsUsuarios gestorUsuarios = new clsUsuarios();
 
         public frmInicioDeSesion()
         {
             InitializeComponent();
-            usuarios = new clsUsuarios();
+            gestorUsuarios = new clsUsuarios();
         }
 
         private void frmInicioDeSesion_Load(object sender, EventArgs e)
@@ -38,40 +39,37 @@ namespace pryBordonInventarioMejorado
 
         private async void btnIngresar_Click(object sender, EventArgs e)
         {
-            string nombreUsuario = txtUsuario.Text.Trim();
+            string usuario = txtUsuario.Text;
             string contrasena = txtContrasena.Text;
 
-            if (string.IsNullOrWhiteSpace(nombreUsuario) || string.IsNullOrWhiteSpace(contrasena))
+            clsUsuario usuarioVerificado = gestorUsuarios.VerificarCredenciales(usuario, contrasena);
+
+            if (usuarioVerificado != null)
             {
-                lblEstado.Text = "Por favor, complete ambos campos.";
-                lblEstado.ForeColor = Color.OrangeRed;
-                await ShakeForm();
-                return;
-            }
+                MessageBox.Show("Bienvenido/a " + usuarioVerificado.NombreUsuario);
 
-            progressBarLogin.Visible = true;
-            lblEstado.Text = "Verificando credenciales...";
-            lblEstado.ForeColor = Color.Gray;
-            Application.DoEvents(); 
+                gestorUsuarios.ActualizarUltimaConexion(usuarioVerificado.Id);
 
-            clsUsuario usuario = usuarios.VerificarCredenciales(nombreUsuario, contrasena);
-
-            progressBarLogin.Visible = false;
-
-            if (usuario != null)
-            {
-                lblEstado.Text = "Inicio de sesión exitoso.";
-                lblEstado.ForeColor = Color.Green;
                 this.Hide();
-                frmMenuPrincipal menuPrincipal = new frmMenuPrincipal(usuario);
-                menuPrincipal.FormClosed += (s, args) => this.Close();
-                menuPrincipal.Show();
+                frmMenuPrincipal frm = new frmMenuPrincipal(usuarioVerificado);
+                frm.Show();
             }
             else
             {
-                lblEstado.Text = "Usuario o contraseña incorrectos.";
-                lblEstado.ForeColor = Color.Red;
-                await ShakeForm();
+                intentosFallidos++;
+
+                if (intentosFallidos < 3)
+                {
+                    await ShakeForm();
+                    MessageBox.Show("Credenciales incorrectas. Intento " + intentosFallidos + " de 3");
+                }
+
+                if (intentosFallidos >= 3)
+                {
+                    gestorUsuarios.BloquearUsuario(usuario);
+                    MessageBox.Show("Usuario bloqueado por demasiados intentos fallidos. La aplicación se cerrará.");
+                    Application.Exit();
+                }
             }
         }
 
