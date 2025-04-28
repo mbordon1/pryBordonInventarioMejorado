@@ -37,13 +37,13 @@
             this.lblUsuario = new System.Windows.Forms.Label();
             this.lblRegistrar = new System.Windows.Forms.Label();
             this.lblSalir = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.panelIniciarSesion = new System.Windows.Forms.Panel();
+            this.picLogo = new System.Windows.Forms.PictureBox();
             this.lblTitulo = new System.Windows.Forms.Label();
             this.btnIniciarSesion = new System.Windows.Forms.Button();
             this.lblIngresa = new System.Windows.Forms.Label();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panelIniciarSesion.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // btnRegistrar
@@ -138,29 +138,29 @@
             this.lblSalir.Text = "X";
             this.lblSalir.Click += new System.EventHandler(this.lblSalir_Click_1);
             // 
-            // panel2
+            // panelIniciarSesion
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.pictureBox1);
-            this.panel2.Controls.Add(this.lblTitulo);
-            this.panel2.Controls.Add(this.btnIniciarSesion);
-            this.panel2.Controls.Add(this.lblIngresa);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(270, 400);
-            this.panel2.TabIndex = 18;
+            this.panelIniciarSesion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.panelIniciarSesion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelIniciarSesion.Controls.Add(this.picLogo);
+            this.panelIniciarSesion.Controls.Add(this.lblTitulo);
+            this.panelIniciarSesion.Controls.Add(this.btnIniciarSesion);
+            this.panelIniciarSesion.Controls.Add(this.lblIngresa);
+            this.panelIniciarSesion.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panelIniciarSesion.Location = new System.Drawing.Point(0, 0);
+            this.panelIniciarSesion.Name = "panelIniciarSesion";
+            this.panelIniciarSesion.Size = new System.Drawing.Size(270, 400);
+            this.panelIniciarSesion.TabIndex = 18;
             // 
-            // pictureBox1
+            // picLogo
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(23, 101);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(213, 110);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 12;
-            this.pictureBox1.TabStop = false;
+            this.picLogo.Image = ((System.Drawing.Image)(resources.GetObject("picLogo.Image")));
+            this.picLogo.Location = new System.Drawing.Point(23, 101);
+            this.picLogo.Name = "picLogo";
+            this.picLogo.Size = new System.Drawing.Size(213, 110);
+            this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picLogo.TabIndex = 12;
+            this.picLogo.TabStop = false;
             // 
             // lblTitulo
             // 
@@ -215,14 +215,14 @@
             this.Controls.Add(this.lblUsuario);
             this.Controls.Add(this.lblRegistrar);
             this.Controls.Add(this.lblSalir);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panelIniciarSesion);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmRegistroUsuario";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmRegistroUsuario";
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panelIniciarSesion.ResumeLayout(false);
+            this.panelIniciarSesion.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,8 +238,8 @@
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label lblRegistrar;
         private System.Windows.Forms.Label lblSalir;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Panel panelIniciarSesion;
+        private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.Label lblTitulo;
         private System.Windows.Forms.Button btnIniciarSesion;
         private System.Windows.Forms.Label lblIngresa;

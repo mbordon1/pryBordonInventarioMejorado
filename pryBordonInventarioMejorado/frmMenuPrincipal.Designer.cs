@@ -30,9 +30,9 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenuPrincipal));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.panelTitulo = new System.Windows.Forms.Panel();
             this.lblUsuario = new System.Windows.Forms.Label();
             this.btnRestaurar = new System.Windows.Forms.PictureBox();
@@ -41,10 +41,9 @@
             this.btnCerrar = new System.Windows.Forms.PictureBox();
             this.MenuVertical = new System.Windows.Forms.Panel();
             this.btnContactos = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panelContactos = new System.Windows.Forms.Panel();
             this.btnCerrarSesion = new System.Windows.Forms.PictureBox();
             this.panelGenerarReporte = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.btnReporte = new System.Windows.Forms.Button();
             this.panelModificar = new System.Windows.Forms.Panel();
             this.btnModificarProducto = new System.Windows.Forms.Button();
@@ -66,7 +65,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             this.MenuVertical.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrarSesion)).BeginInit();
-            this.panelGenerarReporte.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartProductos)).BeginInit();
             this.SuspendLayout();
@@ -154,7 +152,7 @@
             // 
             this.MenuVertical.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(40)))));
             this.MenuVertical.Controls.Add(this.btnContactos);
-            this.MenuVertical.Controls.Add(this.panel2);
+            this.MenuVertical.Controls.Add(this.panelContactos);
             this.MenuVertical.Controls.Add(this.btnCerrarSesion);
             this.MenuVertical.Controls.Add(this.panelGenerarReporte);
             this.MenuVertical.Controls.Add(this.btnReporte);
@@ -191,13 +189,13 @@
             this.btnContactos.UseVisualStyleBackColor = false;
             this.btnContactos.Click += new System.EventHandler(this.btnContactos_Click);
             // 
-            // panel2
+            // panelContactos
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel2.Location = new System.Drawing.Point(0, 305);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(5, 32);
-            this.panel2.TabIndex = 11;
+            this.panelContactos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.panelContactos.Location = new System.Drawing.Point(0, 305);
+            this.panelContactos.Name = "panelContactos";
+            this.panelContactos.Size = new System.Drawing.Size(5, 32);
+            this.panelContactos.TabIndex = 11;
             // 
             // btnCerrarSesion
             // 
@@ -215,19 +213,10 @@
             // panelGenerarReporte
             // 
             this.panelGenerarReporte.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panelGenerarReporte.Controls.Add(this.panel1);
             this.panelGenerarReporte.Location = new System.Drawing.Point(0, 267);
             this.panelGenerarReporte.Name = "panelGenerarReporte";
             this.panelGenerarReporte.Size = new System.Drawing.Size(5, 32);
             this.panelGenerarReporte.TabIndex = 8;
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(5, 32);
-            this.panel1.TabIndex = 9;
             // 
             // btnReporte
             // 
@@ -385,16 +374,16 @@
             // 
             this.chartProductos.BackColor = System.Drawing.SystemColors.Control;
             this.chartProductos.BorderlineColor = System.Drawing.SystemColors.Control;
-            chartArea2.Name = "ChartArea1";
-            this.chartProductos.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chartProductos.Legends.Add(legend2);
+            chartArea1.Name = "ChartArea1";
+            this.chartProductos.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartProductos.Legends.Add(legend1);
             this.chartProductos.Location = new System.Drawing.Point(275, 198);
             this.chartProductos.Name = "chartProductos";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chartProductos.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartProductos.Series.Add(series1);
             this.chartProductos.Size = new System.Drawing.Size(328, 340);
             this.chartProductos.TabIndex = 3;
             this.chartProductos.Text = "chart1";
@@ -433,7 +422,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).EndInit();
             this.MenuVertical.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrarSesion)).EndInit();
-            this.panelGenerarReporte.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartProductos)).EndInit();
             this.ResumeLayout(false);
@@ -462,8 +450,7 @@
         private System.Windows.Forms.Button btnReporte;
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.PictureBox btnCerrarSesion;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panelContactos;
         private System.Windows.Forms.Button btnContactos;
         private System.Windows.Forms.Label lblBajoStock;
         private System.Windows.Forms.Label lblTotalProductos;

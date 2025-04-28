@@ -5,7 +5,7 @@ namespace pryBordonInventarioMejorado
 {
     internal class clsUsuarios
     {
-        private string conexionBD = "Server=.;Database=Comercio;Trusted_Connection=True;";
+        private string conexionBD = "Server=localhost;Database=Comercio;Trusted_Connection=True;";
 
         public clsUsuario VerificarCredenciales(string nombreUsuario, string contrasena)
         {
