@@ -107,8 +107,8 @@ namespace pryBordonInventarioMejorado
         {
             if (num.Value <= 0)
             {
-                num.BackColor = Color.FromArgb(255, 200, 200); 
-                num.ForeColor = Color.Black;  
+                num.BackColor = Color.FromArgb(255, 200, 200);
+                num.ForeColor = Color.Black;
                 toolTip1.SetToolTip(num, "Debe ingresar un valor mayor a 0");
                 return false;
             }
