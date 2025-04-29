@@ -42,7 +42,6 @@ namespace pryBordonInventarioMejorado
             }
         }
 
-
         public DataTable ObtenerProductos()
         {
             string query = "SELECT p.Codigo, p.Nombre, p.Descripcion, p.Precio, p.Stock, c.Nombre AS Categoria " +

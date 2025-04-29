@@ -84,36 +84,7 @@ namespace pryBordonInventarioMejorado
             {
                 { "@nombre", $"%{nombre}%" }
             }));
-        }
-
-        public void ActualizarCambiosDesdeDataTable(DataTable cambios)
-        {
-            using (SqlConnection conexion = new SqlConnection(BD.cadenaConexion))
-            {
-                conexion.Open();
-
-                SqlDataAdapter adaptador = new SqlDataAdapter("SELECT Id, NombreApellido, Telefono, Correo, CategoriaId FROM Contactos", conexion);
-                SqlCommandBuilder builder = new SqlCommandBuilder(adaptador);
-
-                if (cambios.Columns.Contains("Categoria"))
-                {
-                    cambios.Columns.Remove("Categoria");
-                }
-
-                try
-                {
-                    adaptador.Update(cambios);
-                }
-                catch (DBConcurrencyException ex)
-                {
-                    MessageBox.Show("Error de concurrencia: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error general al actualizar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
+        }      
 
         public DataTable ObtenerCategorias()
         {

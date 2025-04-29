@@ -85,6 +85,7 @@ namespace pyInventario
 
         public object EjecutarEscalar(SqlCommand comando)
         {
+            //Devuelve solo el primer valor del primer registro del resultado
             object resultado;
             comando.Connection = conexion;
             conexion.Open();

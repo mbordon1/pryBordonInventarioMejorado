@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,6 @@ namespace pryBordonInventarioMejorado
 {
     public partial class frmInicioDeSesion : Form
     {
-        private int intentosFallidos = 0;
         private clsUsuarios gestorUsuarios = new clsUsuarios();
 
         public frmInicioDeSesion()
@@ -39,8 +39,15 @@ namespace pryBordonInventarioMejorado
 
         private async void btnIngresar_Click(object sender, EventArgs e)
         {
-            string usuario = txtUsuario.Text;
-            string contrasena = txtContrasena.Text;
+            string usuario = txtUsuario.Text.Trim();
+            string contrasena = txtContrasena.Text.Trim();
+
+            if (string.IsNullOrEmpty(usuario) || usuario == "Usuario" ||
+                string.IsNullOrEmpty(contrasena) || contrasena == "Contraseña")
+            {
+                MessageBox.Show("Por favor, complete todos los campos para iniciar sesión.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             clsUsuario usuarioVerificado = gestorUsuarios.VerificarCredenciales(usuario, contrasena);
 
@@ -50,26 +57,18 @@ namespace pryBordonInventarioMejorado
 
                 gestorUsuarios.ActualizarUltimaConexion(usuarioVerificado.Id);
 
+                txtUsuario.Clear();
+                txtContrasena.Clear();
+
                 this.Hide();
                 frmMenuPrincipal frm = new frmMenuPrincipal(usuarioVerificado);
                 frm.Show();
             }
             else
             {
-                intentosFallidos++;
-
-                if (intentosFallidos < 3)
-                {
-                    await ShakeForm();
-                    MessageBox.Show("Credenciales incorrectas. Intento " + intentosFallidos + " de 3");
-                }
-
-                if (intentosFallidos >= 3)
-                {
-                    gestorUsuarios.BloquearUsuario(usuario);
-                    MessageBox.Show("Usuario bloqueado por demasiados intentos fallidos. La aplicación se cerrará.");
-                    Application.Exit();
-                }
+                MessageBox.Show("Credenciales incorrectas o usuario bloqueado.", "Error de autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtContrasena.Clear();
+                await ShakeForm();
             }
         }
 

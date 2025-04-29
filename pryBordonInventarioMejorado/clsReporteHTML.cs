@@ -42,9 +42,7 @@ public class clsReporteHTML
     {
         DataTable productos = new DataTable();
 
-        conexion.ConectarBD(); 
-
-        using (SqlConnection conexionBD = new SqlConnection(conexion.cadenaConexion)) 
+        using (SqlConnection conexionBD = new SqlConnection(conexion.cadenaConexion))
         using (SqlCommand comando = new SqlCommand(@"
         SELECT 
             p.Codigo,
@@ -69,6 +67,7 @@ public class clsReporteHTML
             .OrderBy(cat => cat)
             .ToList();
 
+        var cultura = new CultureInfo("es-AR");
         StringBuilder htmlBuilder = new StringBuilder();
 
         htmlBuilder.AppendLine("<!DOCTYPE html>");
@@ -97,9 +96,9 @@ public class clsReporteHTML
         {
             var productosCategoria = productos.Select($"Categoria = '{categoria}'");
             decimal valorCategoria = productosCategoria.Sum(p =>
-            Convert.ToDecimal(p["Precio"]) * Convert.ToInt32(p["Stock"]));
+                Convert.ToDecimal(p["Precio"]) * Convert.ToInt32(p["Stock"]));
 
-            htmlBuilder.AppendLine($"  <div class='categoria'>{categoria.ToUpper()} (Total: {valorCategoria.ToString("C", new CultureInfo("es-AR"))})</div>");
+            htmlBuilder.AppendLine($"  <div class='categoria'>{categoria.ToUpper()} (Total: {valorCategoria.ToString("C", cultura)})</div>");
             htmlBuilder.AppendLine("  <table>");
             htmlBuilder.AppendLine("    <tr>");
             htmlBuilder.AppendLine("      <th>Código</th>");
@@ -124,9 +123,9 @@ public class clsReporteHTML
                 htmlBuilder.AppendLine($"      <td>{row["Codigo"]}</td>");
                 htmlBuilder.AppendLine($"      <td>{row["Nombre"]}</td>");
                 htmlBuilder.AppendLine($"      <td>{row["Descripcion"]}</td>");
-                htmlBuilder.AppendLine($"      <td>{precio.ToString("C", new CultureInfo("es-AR"))}</td>");
+                htmlBuilder.AppendLine($"      <td>{precio.ToString("C", cultura)}</td>");
                 htmlBuilder.AppendLine($"      <td {claseStock}>{stock}</td>");
-                htmlBuilder.AppendLine($"      <td>{valorTotal.ToString("C", new CultureInfo("es-AR"))}</td>");
+                htmlBuilder.AppendLine($"      <td>{valorTotal.ToString("C", cultura)}</td>");
                 htmlBuilder.AppendLine("    </tr>");
             }
 
@@ -137,7 +136,7 @@ public class clsReporteHTML
         htmlBuilder.AppendLine("    <h3>Resumen General</h3>");
         htmlBuilder.AppendLine($"    <p><strong>Total de Productos:</strong> {totalProductos}</p>");
         htmlBuilder.AppendLine($"    <p><strong>Categorías:</strong> {categorias.Count}</p>");
-        htmlBuilder.AppendLine($"    <p><strong>Valor Total del Inventario:</strong> {valorTotalInventario.ToString("C", new CultureInfo("es-AR"))}</p>");
+        htmlBuilder.AppendLine($"    <p><strong>Valor Total del Inventario:</strong> {valorTotalInventario.ToString("C", cultura)}</p>");
         htmlBuilder.AppendLine("  </div>");
 
         htmlBuilder.AppendLine("</body>");
@@ -145,6 +144,7 @@ public class clsReporteHTML
 
         return htmlBuilder.ToString();
     }
+
 
     private void MostrarEnNavegador(string htmlContent)
     {
