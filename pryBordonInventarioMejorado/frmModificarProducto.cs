@@ -67,6 +67,7 @@ namespace pryBordonInventarioMejorado
 
             for (int i = 0; i < dgvProductos.Rows.Count; i++)
             {
+                // si la fila es nueva (la vacía al final del dgv), la salto
                 if (dgvProductos.Rows[i].IsNewRow) continue;
 
                 DataGridViewRow fila = dgvProductos.Rows[i];
@@ -121,6 +122,7 @@ namespace pryBordonInventarioMejorado
             {
                 foreach (DataRow fila in categorias.Rows)
                 {
+                    // comparo el nombre de la categoria con el nombre seleccionado por el usuario, sin distinguir mayusculas o minusculas
                     if (fila["Nombre"].ToString().Equals(nombreCategoria, StringComparison.OrdinalIgnoreCase))
                     {
                         return Convert.ToInt32(fila["Id"]);

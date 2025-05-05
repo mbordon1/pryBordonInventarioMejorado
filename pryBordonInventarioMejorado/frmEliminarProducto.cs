@@ -45,7 +45,7 @@ namespace pryBordonInventarioMejorado
             }
             else
             {
-                btnEliminar.Enabled=true;
+                btnEliminar.Enabled = true;
                 DataGridViewRow filaSeleccionada = dgvProductos.SelectedRows[0];
 
                 string nombreProducto = filaSeleccionada.Cells["Nombre"].Value.ToString();
@@ -60,7 +60,6 @@ namespace pryBordonInventarioMejorado
                 if (confirmacion == DialogResult.Yes)
                 {
                     productosCRUD.EliminarProductoPorNombre(nombreProducto);
-
                     CargarProductos();
                 }
             }    

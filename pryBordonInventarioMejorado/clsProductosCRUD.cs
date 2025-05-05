@@ -65,6 +65,8 @@ namespace pryBordonInventarioMejorado
         {
             try
             {
+                // el uso del bloque "using" asegura que la conexión a la base de datos se cierre correctamente después de ejecutar la consulta
+                ///esto ayuda a evitar fugas de memoria y optimiza el uso de recursos
                 using (SqlConnection conexion = new SqlConnection(conexionBD.ObtenerCadenaConexion()))
                 {
                     string query = "UPDATE Productos SET Nombre = @Nombre, Descripcion = @Descripcion, Precio = @Precio, Stock = @Stock, CategoriaId = @CategoriaId WHERE Codigo = @Codigo";

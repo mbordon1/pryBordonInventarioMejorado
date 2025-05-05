@@ -38,10 +38,6 @@ namespace pryBordonInventarioMejorado
             DataTable categorias = productosBD.ObtenerCategorias();
             if (categorias != null)
             {
-                DataRow row = categorias.NewRow();
-                row["Nombre"] = "Seleccionar categoría";
-                categorias.Rows.InsertAt(row, 0); 
-
                 cmbCategorias.DisplayMember = "Nombre";
                 cmbCategorias.ValueMember = "Id";
                 cmbCategorias.DataSource = categorias;
@@ -127,7 +123,6 @@ namespace pryBordonInventarioMejorado
                 toolTip1.SetToolTip(cmb, "Debe seleccionar una categoría");
                 return false;
             }
-
             cmb.BackColor = Color.FromArgb(200, 255, 200); 
             cmb.ForeColor = Color.Black;
             return true;

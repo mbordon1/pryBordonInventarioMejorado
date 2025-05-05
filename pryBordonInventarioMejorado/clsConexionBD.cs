@@ -47,7 +47,7 @@ namespace pyInventario
             }
         }
 
-        // Ejecutar comandos que no devuelvan datos (INSERT, UPDATE, DELETE)
+        // ejecuta comandos que no devuelvan datos (INSERT, UPDATE, DELETE)
         public void EjecutarComando(SqlCommand comando)
         {
             try
@@ -97,7 +97,7 @@ namespace pyInventario
             return dt;
         }
 
-        // utilizado para consultas que devuelvan un solo valor (COUNT, MAX, etc.)
+        // se utiliza para consultas que devuelvan un solo valor (COUNT, MAX)
         public object EjecutarEscalar(SqlCommand comando)
         {
             object resultado = null;
