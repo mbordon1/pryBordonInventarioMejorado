@@ -44,7 +44,7 @@ namespace pryBordonInventarioMejorado
 
         public DataTable ObtenerProductos()
         {
-            string query = "SELECT p.Codigo, p.Nombre, p.Descripcion, p.Precio, p.Stock, c.Nombre AS Categoria " +
+            string query = "SELECT p.Codigo, p.Nombre, p.Descripcion, p.Precio, p.Stock, p.CategoriaId, c.Nombre AS Categoria " +
                            "FROM Productos p INNER JOIN Categorias c ON p.CategoriaId = c.Id";
             SqlCommand comando = new SqlCommand(query);
             return Conexion.EjecutarConsulta(comando);
@@ -65,23 +65,27 @@ namespace pryBordonInventarioMejorado
         {
             try
             {
-                string query = "UPDATE Productos SET Nombre = @Nombre, Descripcion = @Descripcion, Precio = @Precio, " +
-                               "Stock = @Stock, CategoriaId = @CategoriaId WHERE Codigo = @Codigo";
+                using (SqlConnection conexion = new SqlConnection(conexionBD.ObtenerCadenaConexion()))
+                {
+                    string query = "UPDATE Productos SET Nombre = @Nombre, Descripcion = @Descripcion, Precio = @Precio, Stock = @Stock, CategoriaId = @CategoriaId WHERE Codigo = @Codigo";
 
-                SqlCommand comando = new SqlCommand(query);
-                comando.Parameters.AddWithValue("@Codigo", producto.Codigo);
-                comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
-                comando.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
-                comando.Parameters.AddWithValue("@Precio", producto.Precio);
-                comando.Parameters.AddWithValue("@Stock", producto.Stock);
-                comando.Parameters.AddWithValue("@CategoriaId", producto.CategoriaId);
+                    using (SqlCommand comando = new SqlCommand(query, conexion))
+                    {
+                        comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                        comando.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                        comando.Parameters.AddWithValue("@Precio", producto.Precio);
+                        comando.Parameters.AddWithValue("@Stock", producto.Stock);
+                        comando.Parameters.AddWithValue("@CategoriaId", producto.CategoriaId);
+                        comando.Parameters.AddWithValue("@Codigo", producto.Codigo);
 
-                Conexion.EjecutarComando(comando);
-                MessageBox.Show("Producto modificado correctamente.");
+                        conexion.Open();
+                        comando.ExecuteNonQuery();
+                    }
+                }
             }
-            catch (Exception error)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error al modificar producto: " + error.Message);
+                MessageBox.Show("Error al modificar el producto: " + ex.Message);
             }
         }
 

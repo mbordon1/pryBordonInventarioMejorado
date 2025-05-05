@@ -17,39 +17,48 @@ namespace pyInventario
     public class conexionBD
     {
         public string cadenaConexion = "Server=localhost;Database=Comercio;Trusted_Connection=True;";
-
         private SqlConnection conexion;
-
         public string nombreBaseDeDatos;
 
         public conexionBD()
         {
-            conexion = new SqlConnection(cadenaConexion); 
+            conexion = new SqlConnection(cadenaConexion);
         }
+
+        public static string ObtenerCadenaConexion()
+        {
+            return "Server=localhost;Database=Comercio;Trusted_Connection=True;";
+        }
+
         public void ConectarBD()
         {
             try
             {
-                conexion = new SqlConnection(cadenaConexion);
-
-                nombreBaseDeDatos = conexion.Database;
-
-                conexion.Open();
-
-                MessageBox.Show("Conectado a " + nombreBaseDeDatos);
+                if (conexion.State != ConnectionState.Open)
+                {
+                    conexion.Open();
+                    nombreBaseDeDatos = conexion.Database;
+                    MessageBox.Show("Conectado a " + nombreBaseDeDatos);
+                }
             }
             catch (Exception error)
             {
-                MessageBox.Show("Tiene un errorcito - " + error.Message);
+                MessageBox.Show("Error de conexión: " + error.Message);
             }
         }
 
+        // Ejecutar comandos que no devuelvan datos (INSERT, UPDATE, DELETE)
         public void EjecutarComando(SqlCommand comando)
         {
             try
             {
                 comando.Connection = conexion;
-                conexion.Open();
+
+                if (conexion.State != ConnectionState.Open)
+                {
+                    conexion.Open();
+                }
+
                 comando.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -68,7 +77,12 @@ namespace pyInventario
             try
             {
                 comando.Connection = conexion;
-                conexion.Open();
+
+                if (conexion.State != ConnectionState.Open)
+                {
+                    conexion.Open();
+                }
+
                 SqlDataAdapter adapter = new SqlDataAdapter(comando);
                 adapter.Fill(dt);
             }
@@ -83,14 +97,29 @@ namespace pyInventario
             return dt;
         }
 
+        // utilizado para consultas que devuelvan un solo valor (COUNT, MAX, etc.)
         public object EjecutarEscalar(SqlCommand comando)
         {
-            //Devuelve solo el primer valor del primer registro del resultado
-            object resultado;
-            comando.Connection = conexion;
-            conexion.Open();
-            resultado = comando.ExecuteScalar();
-            conexion.Close();
+            object resultado = null;
+            try
+            {
+                comando.Connection = conexion;
+
+                if (conexion.State != ConnectionState.Open)
+                {
+                    conexion.Open();
+                }
+
+                resultado = comando.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al ejecutar consulta escalar: " + ex.Message);
+            }
+            finally
+            {
+                conexion.Close();
+            }
             return resultado;
         }
     }

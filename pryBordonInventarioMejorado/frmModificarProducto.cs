@@ -16,12 +16,13 @@ namespace pryBordonInventarioMejorado
     {
         private clsProductosCRUD productosCRUD;
         private DataTable categorias;
-        private List<DataRow> productosOriginales;  // Lista para guardar los productos originales- Sin modificacion
+        DataTable productosOriginales; // esta lista guarda los productos originales - sin modificacion
 
         public frmModificarProducto()
         {
             InitializeComponent();
             productosCRUD = new clsProductosCRUD();
+            productosOriginales = new DataTable();
         }
 
         private void frmModificarProducto_Load(object sender, EventArgs e)
@@ -31,11 +32,14 @@ namespace pryBordonInventarioMejorado
 
             dgvProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvProductos.MultiSelect = false;
-            dgvProductos.ReadOnly = false;
+            dgvProductos.ReadOnly = false; 
             dgvProductos.AllowUserToAddRows = false;
-            dgvProductos.Columns["Codigo"].ReadOnly = true;
+            dgvProductos.Columns["Codigo"].ReadOnly = true;  
+            dgvProductos.Columns["Precio"].ReadOnly = false;  
+            dgvProductos.Columns["Stock"].ReadOnly = false;  
+            dgvProductos.Columns["Categoria"].ReadOnly = false;  
         }
-
+        
         private void CargarCategorias()
         {
             try
@@ -50,79 +54,66 @@ namespace pryBordonInventarioMejorado
 
         private void CargarProductos()
         {
-            DataTable productos = productosCRUD.ObtenerProductos();
-            dgvProductos.DataSource = productos;
-            dgvProductos.ClearSelection();
-            productosOriginales = productos.AsEnumerable().ToList();  // Guardar el estado original de los productos
-            ReemplazarColumnaCategoriaConComboBox();
+            DataTable dt = productosCRUD.ObtenerProductos();
+            productosOriginales = dt.Copy(); // copia para comparar despues 
+            dgvProductos.DataSource = dt;
+
+            ReemplazarColumnaCategoriaConComboBox(); 
         }
 
         private void btnGuardarCambios_Click(object sender, EventArgs e)
         {
             bool cambiosDetectados = false;
 
-            // Recorre todas las filas para detectar cambios
-            foreach (DataGridViewRow fila in dgvProductos.Rows)
+            for (int i = 0; i < dgvProductos.Rows.Count; i++)
             {
-                if (fila.IsNewRow) continue;  // Ignorar la fila de nueva
+                if (dgvProductos.Rows[i].IsNewRow) continue;
 
-                int codigoProducto = Convert.ToInt32(fila.Cells["Codigo"].Value);
-                var productoOriginal = productosOriginales.FirstOrDefault(p => Convert.ToInt32(p["Codigo"]) == codigoProducto);
+                DataGridViewRow fila = dgvProductos.Rows[i];
+                DataRow filaOriginal = productosOriginales.Rows[i];
 
-                if (productoOriginal != null)
+                int codigo = Convert.ToInt32(fila.Cells["Codigo"].Value);
+                string nombre = fila.Cells["Nombre"].Value?.ToString();
+                string descripcion = fila.Cells["Descripcion"].Value?.ToString();
+                decimal precio = Convert.ToDecimal(fila.Cells["Precio"].Value);
+                int stock = Convert.ToInt32(fila.Cells["Stock"].Value);
+                int categoriaId = ObtenerCategoriaIdDesdeNombre(fila.Cells["Categoria"].Value?.ToString());
+
+                bool haCambiado =
+                    filaOriginal["Nombre"].ToString() != nombre ||
+                    filaOriginal["Descripcion"].ToString() != descripcion ||
+                    Convert.ToDecimal(filaOriginal["Precio"]) != precio ||
+                    Convert.ToInt32(filaOriginal["Stock"]) != stock ||
+                    Convert.ToInt32(filaOriginal["CategoriaId"]) != categoriaId;
+
+                if (haCambiado)
                 {
-                    bool haCambiado = false;
-                    string nombreProducto = fila.Cells["Nombre"].Value?.ToString();
-
-                    // Comparar cada celda para ver si hubo cambios
-                    if (productoOriginal["Nombre"].ToString() != nombreProducto)
-                        haCambiado = true;
-                    else if (productoOriginal["Descripcion"].ToString() != fila.Cells["Descripcion"].Value?.ToString())
-                        haCambiado = true;
-                    else if (Convert.ToDecimal(productoOriginal["Precio"]) != Convert.ToDecimal(fila.Cells["Precio"].Value))
-                        haCambiado = true;
-                    else if (Convert.ToInt32(productoOriginal["Stock"]) != Convert.ToInt32(fila.Cells["Stock"].Value))
-                        haCambiado = true;
-                    else if (Convert.ToInt32(productoOriginal["CategoriaId"]) != ObtenerCategoriaIdDesdeNombre(fila.Cells["Categoria"].Value?.ToString()))
-                        haCambiado = true;
-
-                    // Si hubo cambios, se guarda el producto
-                    if (haCambiado)
+                    clsProductos productoModificado = new clsProductos
                     {
-                        cambiosDetectados = true;
-                        clsProductos productoModificado = new clsProductos()
-                        {
-                            Codigo = codigoProducto,
-                            Nombre = fila.Cells["Nombre"].Value?.ToString(),
-                            Descripcion = fila.Cells["Descripcion"].Value?.ToString(),
-                            Precio = Convert.ToDecimal(fila.Cells["Precio"].Value),
-                            Stock = Convert.ToInt32(fila.Cells["Stock"].Value),
-                            CategoriaId = ObtenerCategoriaIdDesdeNombre(fila.Cells["Categoria"].Value?.ToString())
-                        };
+                        Codigo = codigo,
+                        Nombre = nombre,
+                        Descripcion = descripcion,
+                        Precio = precio,
+                        Stock = stock,
+                        CategoriaId = categoriaId
+                    };
 
-                        try
-                        {
-                            productosCRUD.ModificarProducto(productoModificado);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Error al guardar cambios: " + ex.Message);
-                            return;
-                        }
-                    }
+                    productosCRUD.ModificarProducto(productoModificado);
+                    cambiosDetectados = true;
                 }
             }
 
             if (cambiosDetectados)
             {
                 MessageBox.Show("Cambios guardados correctamente.");
-                CargarProductos();  
+                CargarProductos();
             }
             else
             {
                 MessageBox.Show("No se detectaron cambios.");
             }
         }
+
 
         private int ObtenerCategoriaIdDesdeNombre(string nombreCategoria)
         {
@@ -147,7 +138,7 @@ namespace pryBordonInventarioMejorado
             {
                 Name = "Categoria",
                 HeaderText = "Categoría",
-                DataPropertyName = "Categoria",
+                DataPropertyName = "Categoria", 
                 DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton,
                 FlatStyle = FlatStyle.Flat,
                 Width = dgvProductos.Columns["Categoria"].Width
@@ -158,7 +149,7 @@ namespace pryBordonInventarioMejorado
                 comboCategoria.Items.Add(fila["Nombre"].ToString());
             }
 
-            dgvProductos.Columns.Remove("Categoria");
+            dgvProductos.Columns.RemoveAt(indiceColumna);
             dgvProductos.Columns.Insert(indiceColumna, comboCategoria);
         }
 
