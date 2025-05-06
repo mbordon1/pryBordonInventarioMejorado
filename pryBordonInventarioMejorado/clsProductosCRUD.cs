@@ -1,12 +1,7 @@
 ﻿using pyInventario;
 using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace pryBordonInventarioMejorado
 {
@@ -34,11 +29,10 @@ namespace pryBordonInventarioMejorado
                 comando.Parameters.AddWithValue("@CategoriaId", producto.CategoriaId);
 
                 Conexion.EjecutarComando(comando);
-                MessageBox.Show("Producto agregado correctamente.");
             }
             catch (Exception error)
             {
-                MessageBox.Show("Error al agregar producto: " + error.Message);
+                throw new Exception("Error al agregar producto: " + error.Message, error);
             }
         }
 
@@ -54,7 +48,7 @@ namespace pryBordonInventarioMejorado
         {
             string query = "SELECT p.Codigo, p.Nombre, p.Descripcion, p.Precio, p.Stock, c.Nombre AS Categoria " +
                            "FROM Productos p INNER JOIN Categorias c ON p.CategoriaId = c.Id " +
-                           "WHERE p.Nombre LIKE @Texto OR p.Codigo LIKE @Texto";
+                           "WHERE p.Nombre LIKE @Texto OR CAST(p.Codigo AS VARCHAR) LIKE @Texto";
 
             SqlCommand comando = new SqlCommand(query);
             comando.Parameters.AddWithValue("@Texto", "%" + texto + "%");
@@ -65,29 +59,21 @@ namespace pryBordonInventarioMejorado
         {
             try
             {
-                // el uso del bloque "using" asegura que la conexión a la base de datos se cierre correctamente después de ejecutar la consulta
-                ///esto ayuda a evitar fugas de memoria y optimiza el uso de recursos
-                using (SqlConnection conexion = new SqlConnection(conexionBD.ObtenerCadenaConexion()))
-                {
-                    string query = "UPDATE Productos SET Nombre = @Nombre, Descripcion = @Descripcion, Precio = @Precio, Stock = @Stock, CategoriaId = @CategoriaId WHERE Codigo = @Codigo";
+                string query = "UPDATE Productos SET Nombre = @Nombre, Descripcion = @Descripcion, Precio = @Precio, Stock = @Stock, CategoriaId = @CategoriaId WHERE Codigo = @Codigo";
 
-                    using (SqlCommand comando = new SqlCommand(query, conexion))
-                    {
-                        comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
-                        comando.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
-                        comando.Parameters.AddWithValue("@Precio", producto.Precio);
-                        comando.Parameters.AddWithValue("@Stock", producto.Stock);
-                        comando.Parameters.AddWithValue("@CategoriaId", producto.CategoriaId);
-                        comando.Parameters.AddWithValue("@Codigo", producto.Codigo);
+                SqlCommand comando = new SqlCommand(query);
+                comando.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                comando.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                comando.Parameters.AddWithValue("@Precio", producto.Precio);
+                comando.Parameters.AddWithValue("@Stock", producto.Stock);
+                comando.Parameters.AddWithValue("@CategoriaId", producto.CategoriaId);
+                comando.Parameters.AddWithValue("@Codigo", producto.Codigo);
 
-                        conexion.Open();
-                        comando.ExecuteNonQuery();
-                    }
-                }
+                Conexion.EjecutarComando(comando);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al modificar el producto: " + ex.Message);
+                throw new Exception("Error al modificar el producto: " + ex.Message, ex);
             }
         }
 
@@ -100,11 +86,10 @@ namespace pryBordonInventarioMejorado
                 comando.Parameters.AddWithValue("@Nombre", nombreProducto);
 
                 Conexion.EjecutarComando(comando);
-                MessageBox.Show("Producto eliminado correctamente.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al eliminar producto: " + ex.Message);
+                throw new Exception("Error al eliminar producto: " + ex.Message, ex);
             }
         }
 
@@ -139,8 +124,7 @@ namespace pryBordonInventarioMejorado
             SqlCommand comando = new SqlCommand(query);
             return Convert.ToInt32(Conexion.EjecutarEscalar(comando));
         }
-
     }
-
 }
+
 

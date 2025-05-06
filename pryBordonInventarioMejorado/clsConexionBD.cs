@@ -25,28 +25,6 @@ namespace pyInventario
             conexion = new SqlConnection(cadenaConexion);
         }
 
-        public static string ObtenerCadenaConexion()
-        {
-            return "Server=localhost;Database=Comercio;Trusted_Connection=True;";
-        }
-
-        public void ConectarBD()
-        {
-            try
-            {
-                if (conexion.State != ConnectionState.Open)
-                {
-                    conexion.Open();
-                    nombreBaseDeDatos = conexion.Database;
-                    MessageBox.Show("Conectado a " + nombreBaseDeDatos);
-                }
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show("Error de conexión: " + error.Message);
-            }
-        }
-
         // ejecuta comandos que no devuelvan datos (INSERT, UPDATE, DELETE)
         public void EjecutarComando(SqlCommand comando)
         {
