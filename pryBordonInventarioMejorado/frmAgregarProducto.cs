@@ -130,13 +130,14 @@ namespace pryBordonInventarioMejorado
 
         private bool ValidarCampos()
         {
-            if (!ValidarTexto(txtNombre)) return false;
+            //filtro rapido
+            if (!ValidarTexto(txtNombre)) return false; //se detiene el metodo
             if (!ValidarTexto(txtDescripcion)) return false;
             if (!ValidarNumero(numPrecio)) return false;
             if (!ValidarNumero(numStock)) return false;
             if (!ValidarCombo(cmbCategorias)) return false;
 
-            return true;
+            return true; //campos validados coreectamente
         }
 
         public void LimpiarCampos()

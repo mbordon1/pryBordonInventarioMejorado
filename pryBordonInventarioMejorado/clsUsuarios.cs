@@ -11,6 +11,7 @@ namespace pryBordonInventarioMejorado
         {
             if (string.IsNullOrWhiteSpace(nombreUsuario) || string.IsNullOrWhiteSpace(contrasena))
             {
+                //no se puede proceder con la verificación de credenciales.fin
                 return null;
             }
 
@@ -52,7 +53,7 @@ namespace pryBordonInventarioMejorado
                                 }
                                 else
                                 {
-                                    return null; 
+                                    return null; //bloqueadooo
                                 }
                             }
                             else
@@ -75,7 +76,7 @@ namespace pryBordonInventarioMejorado
                                 BloquearUsuario(nombreUsuario);
                             }
 
-                            return null; 
+                            return null; //las credenciales no son correctas
                         }
 
                         ReiniciarIntentosFallidos(nombreUsuario);
@@ -139,18 +140,6 @@ namespace pryBordonInventarioMejorado
             {
                 conexion.Open();
                 string consulta = "UPDATE Usuarios SET IntentosFallidos = 0 WHERE Usuario = @Usuario";
-                SqlCommand comando = new SqlCommand(consulta, conexion);
-                comando.Parameters.AddWithValue("@Usuario", nombreUsuario);
-                comando.ExecuteNonQuery();
-            }
-        }
-
-        public void IncrementarIntentosFallidos(string nombreUsuario)
-        {
-            using (SqlConnection conexion = new SqlConnection(conexionBD))
-            {
-                conexion.Open();
-                string consulta = "UPDATE Usuarios SET IntentosFallidos = IntentosFallidos + 1 WHERE Usuario = @Usuario";
                 SqlCommand comando = new SqlCommand(consulta, conexion);
                 comando.Parameters.AddWithValue("@Usuario", nombreUsuario);
                 comando.ExecuteNonQuery();

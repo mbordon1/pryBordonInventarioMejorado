@@ -22,14 +22,14 @@ public class clsReporteHTML
     {
         try
         {
-            string htmlContent = GenerarHTMLReport();
+            string contenidoHTML = GenerarReporteHTML();
 
-            MostrarEnNavegador(htmlContent);
+            MostrarEnNavegador(contenidoHTML);
 
             if (MessageBox.Show("¿Desea guardar una copia del reporte?", "Guardar reporte",
                               MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                GuardarReporte(htmlContent);
+                GuardarReporte(contenidoHTML);
             }
         }
         catch (Exception ex)
@@ -38,7 +38,7 @@ public class clsReporteHTML
         }
     }
 
-    private string GenerarHTMLReport()
+    private string GenerarReporteHTML()
     {
         DataTable productos = new DataTable();
 
@@ -146,15 +146,14 @@ public class clsReporteHTML
     }
 
 
-    private void MostrarEnNavegador(string htmlContent)
+    private void MostrarEnNavegador(string contenidoHTML)
     {
-        string tempFile = Path.Combine(Path.GetTempPath(), $"ReporteInventario_{DateTime.Now:yyyyMMddHHmmss}.html");
-        File.WriteAllText(tempFile, htmlContent);
-
-        Process.Start(new ProcessStartInfo(tempFile) { UseShellExecute = true });
+        string archivoTemp = Path.Combine(Path.GetTempPath(), $"ReporteInventario_{DateTime.Now:yyyyMMddHHmmss}.html");
+        File.WriteAllText(archivoTemp, contenidoHTML);
+        Process.Start(new ProcessStartInfo(archivoTemp) { UseShellExecute = true });
     }
 
-    private void GuardarReporte(string htmlContent)
+    private void GuardarReporte(string contenidoHTML)
     {
         SaveFileDialog saveDialog = new SaveFileDialog();
         saveDialog.Filter = "Archivo HTML|*.html";
@@ -163,7 +162,7 @@ public class clsReporteHTML
 
         if (saveDialog.ShowDialog() == DialogResult.OK)
         {
-            File.WriteAllText(saveDialog.FileName, htmlContent);
+            File.WriteAllText(saveDialog.FileName, contenidoHTML);
             MessageBox.Show($"Reporte guardado en:\n{saveDialog.FileName}", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }

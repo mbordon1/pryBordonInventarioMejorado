@@ -81,7 +81,7 @@ namespace pryBordonInventarioMejorado
             dgvContactos.Columns["Id"].Visible = false;
 
             cmbBuscar.Items.Clear();
-            HashSet<string> nombres = new HashSet<string>();
+            HashSet<string> nombres = new HashSet<string>(); //almacena valores unicos, la coleccion no permite duplicados
             foreach (DataRow fila in tablaContactos.Rows)
             {
                 string nombre = fila["NombreApellido"].ToString();
