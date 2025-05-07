@@ -13,6 +13,11 @@ namespace pryBordonInventarioMejorado
             InitializeComponent();
         }
 
+        private void frmRegistroUsuario_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void btnIniciarSesion_Click(object sender, EventArgs e)
         {
             frmInicioDeSesion InicioDeSesion = new frmInicioDeSesion();
@@ -42,14 +47,13 @@ namespace pryBordonInventarioMejorado
 
                 try
                 {
-                    // Verificar si el usuario ya existe
                     if (usuarios.VerificarCredenciales(txtUsuarioReg.Text.Trim(), txtContraseñaReg.Text.Trim()) != null)
                     {
                         MessageBox.Show("El usuario ya existe", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
-                        // Registrar el nuevo usuario con la contraseña en texto claro
+                        // registra el nuevo usuario con la contraseña en texto claro
                         using (SqlConnection conexion = new SqlConnection(@"Server=localhost;Database=Comercio;Trusted_Connection=True;"))
                         {
                             conexion.Open();
@@ -57,7 +61,7 @@ namespace pryBordonInventarioMejorado
                             SqlCommand comando = new SqlCommand(query, conexion);
                             comando.Parameters.AddWithValue("@Usuario", txtUsuarioReg.Text.Trim());
                             comando.Parameters.AddWithValue("@Contrasena", txtContraseñaReg.Text.Trim());
-                            comando.Parameters.AddWithValue("@Rol", "Usuario");  // Por defecto asignamos el rol como "Usuario"
+                            comando.Parameters.AddWithValue("@Rol", "Usuario");  //por defecto rol como usuario
 
                             comando.ExecuteNonQuery();
                         }

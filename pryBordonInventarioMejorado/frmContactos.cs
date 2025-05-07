@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace pryBordonInventarioMejorado
@@ -94,6 +95,7 @@ namespace pryBordonInventarioMejorado
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
+            //-----> el método o función se interrumpe y no sigue ejecutando el código posterior
             if (!ValidarCampos()) return;
 
             clsContacto nuevo = new clsContacto()
@@ -105,7 +107,7 @@ namespace pryBordonInventarioMejorado
             };
 
             crudContactos.AgregarContacto(nuevo);
-            MessageBox.Show("✅ Contacto agregado correctamente.", "Agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Contacto agregado correctamente.", "Agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);
             LimpiarCampos();
             CargarContactos();
         }
@@ -117,7 +119,7 @@ namespace pryBordonInventarioMejorado
                 string.IsNullOrWhiteSpace(txtCorreo.Text) ||
                 cmbCategoria.SelectedIndex == -1)
             {
-                MessageBox.Show("⚠️ Completá todos los campos antes de agregar.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Completá todos los campos antes de agregar.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
             return true;
@@ -155,7 +157,9 @@ namespace pryBordonInventarioMejorado
                 if (fila.IsNewRow) continue;
 
                 int id = Convert.ToInt32(fila.Cells["Id"].Value);
+                // obtiene la colección de filas del DataTable "contactosOriginales"
                 var contactoOriginal = contactosOriginales.Rows
+                    //(filas) ahora son ---> colección de objetos DataRow --> trabaja con cada fila como un objeto 
                     .Cast<DataRow>()
                     .FirstOrDefault(r => Convert.ToInt32(r["Id"]) == id);
 

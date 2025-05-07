@@ -72,7 +72,7 @@ namespace pryBordonInventarioMejorado
             this.WindowState = FormWindowState.Minimized;
         }
 
-        // Movimiento del formulario
+        //movimiento del formulario con panel -- sin bordes 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
 
@@ -138,6 +138,7 @@ namespace pryBordonInventarioMejorado
 
             Series serie = new Series
             {
+                //grafico circular
                 ChartType = SeriesChartType.Pie,
                 IsValueShownAsLabel = true,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold)
@@ -151,12 +152,6 @@ namespace pryBordonInventarioMejorado
             }
 
             chartProductos.Series.Add(serie);
-        }
-
-
-        private void panelTitulo_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

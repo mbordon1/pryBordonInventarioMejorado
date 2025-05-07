@@ -1,47 +1,63 @@
 ﻿using pyInventario;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace pryBordonInventarioMejorado
 {
     public partial class frmProductos : Form
     {
+        private clsProductosCRUD productosBD = new clsProductosCRUD();
+
         public frmProductos()
         {
             InitializeComponent();
         }
 
-        private clsProductosCRUD productosBD = new clsProductosCRUD();
-
+        // DLLs para mover ventana desde el panel de título personalizado
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
+
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
+        private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
         private void frmProductos_Load(object sender, EventArgs e)
         {
             CargarProductos();
         }
 
-        public void CargarProductos()
+        private void CargarProductos()
         {
-            DataTable productos = productosBD.ObtenerProductos();
-            if (productos != null)
+            try
             {
-                dgvProductos.DataSource = productos;
+                dgvProductos.DataSource = productosBD.ObtenerProductos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar productos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void txtBuscarProducto_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                string texto = txtBuscarProducto.Text.Trim();
+
+                dgvProductos.DataSource = string.IsNullOrEmpty(texto)
+                ? productosBD.ObtenerProductos() : productosBD.BuscarProductoPorTexto(texto);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al buscar producto: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // controles de ventana --> panel 
         private void btnCerrar_Click(object sender, EventArgs e)
         {
-          this.Close(); 
+            this.Close();
         }
 
         private void btnMaximizar_Click(object sender, EventArgs e)
@@ -68,27 +84,6 @@ namespace pryBordonInventarioMejorado
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
-
-        private void txtBuscarProducto_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                string texto = txtBuscarProducto.Text.Trim();
-
-                if (string.IsNullOrEmpty(texto))
-                {
-                    CargarProductos();
-                }
-                else
-                {
-                    DataTable productosFiltrados = productosBD.BuscarProductoPorTexto(texto);
-                    dgvProductos.DataSource = productosFiltrados;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al buscar producto: {ex.Message}");
-            }
-        }
     }
 }
+

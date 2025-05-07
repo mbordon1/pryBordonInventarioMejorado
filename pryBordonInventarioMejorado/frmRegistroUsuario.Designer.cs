@@ -220,6 +220,7 @@
             this.Name = "frmRegistroUsuario";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmRegistroUsuario";
+            this.Load += new System.EventHandler(this.frmRegistroUsuario_Load);
             this.panelIniciarSesion.ResumeLayout(false);
             this.panelIniciarSesion.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
